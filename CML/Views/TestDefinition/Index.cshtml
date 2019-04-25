@@ -1,0 +1,42 @@
+﻿
+@(Html.Kendo().Grid<CML.Models.TestDefinitionModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.Name);
+          columns.Bound(c => c.Abbrev);
+          columns.Bound(c => c.Determines);
+          columns.Bound(c => c.SampleType);
+          columns.Bound(c => c.RequiredSampleSize);
+          columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+      })
+      .ToolBar(toolbar => {
+          toolbar.Create();
+          toolbar.Excel();
+      })
+      .ColumnMenu()
+      .Editable(editable => editable.Mode(GridEditMode.PopUp))
+      .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(5))
+      .HtmlAttributes(new { @class = "k-grid-full" })
+      .Navigatable()
+      .Selectable(selectable => {
+          selectable.Mode(GridSelectionMode.Single);
+          selectable.Type(GridSelectionType.Row);
+      })
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p => p.TestDefinitionID))
+          .Read(read => read.Action("CML_TestDefinition_Read", "TestDefinition"))
+          .Create(create => create.Action("CML_TestDefinition_Create", "TestDefinition"))
+          .Update(update => update.Action("CML_TestDefinition_Update", "TestDefinition"))
+          .Destroy(destroy => destroy.Action("CML_TestDefinition_Destroy", "TestDefinition"))
+      )
+)

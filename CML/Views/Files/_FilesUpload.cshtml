@@ -1,0 +1,28 @@
+﻿@model CML.Models.AttachmentsModel
+@(Html.Kendo().Upload()
+        .Name( "files" )
+        .Async( a => a
+                 .Save( "Save_Files", "Files", new { id = Model.ParentID, parentType = Model.ParentType }  )
+                 .Remove( "Remove_Files", "Files", new { id = Model.ParentID, parentType = Model.ParentType } )
+
+                  )
+                .Files( files =>
+                {
+                    var t = Model.Attachments;
+                    foreach ( var f in t )
+                    {
+
+                        files.Add().Name( Html.ActionLink( f.Name, "Download","Files", new { id = Model.ParentID, parentType = Model.ParentType, name = f.Name },null ).ToHtmlString()+"<br/>"+ Html.ActionLink("Delete","Remove_File","Files", new { id = Model.ParentID, parentType = Model.ParentType, name = f.Name },null ).ToHtmlString() )
+                        .Extension( f.Extension ).Size( f.Size );
+
+                    }
+                } )
+
+
+
+
+
+
+
+
+)

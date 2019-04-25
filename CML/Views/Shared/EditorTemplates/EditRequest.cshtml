@@ -1,0 +1,18 @@
+﻿@model CML.Models.CML_RequestType
+<div class="k-edit-form-container">
+    
+    @Html.HiddenFor(model => model.ID)
+    
+   
+    <div class="k-edit-label">
+        @Html.Label("Request Type:")
+    </div>
+    <div class="k-edit-field">
+        @Html.EditorFor(model => model.RequestType,null,"editorInput",null)
+        @Html.ValidationMessageFor(model => model.RequestType)
+    </div>
+
+
+
+    
+</div>

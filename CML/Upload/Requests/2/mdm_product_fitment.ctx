@@ -1,0 +1,56 @@
+******************* GENERAL *************************
+ENV_NAME | DEV
+
+******************* JOB NOTIFICATION & ALERTING *************************
+JOB_NOTIFICATION_EMAIL_FROM_ADDRESS | talend.integrations@na.exide.com
+JOB_NOTIFICATION_EMAIL_TO_FAILURE_ADDRESS | renae.haley@exide.net;chris.mccarthy@exide.com
+JOB_NOTIFICATION_EMAIL_TO_SUCCESS_ADDRESS | chris.mccarthy@exide.com
+
+******************* SMTP NOTIFICATION & ALERTING *************************
+ENV_SMTP_HOST | smtp.insideexide.com
+ENV_SMTP_PORT | 25
+
+************** MSSQL DATABASE SETTTINGS ********************
+TMDM_MSSQL_Port | 64196		
+TMDM_MSSQL_Server | SQLCLUST121
+TMDM_MSSQL_Schema |
+TMDM_MSSQL_Login | talac
+TMDM_MSSQL_Database | talmdmdev641_BatteryLiftTruckMatch_MASTER
+TMDM_MSSQL_Password | Tal@exide
+
+************** Talend MDM Application ********************
+TALEND_MDM_URL | http://localhost:8180/talendmdm/services/soap		
+TALEND_MDM_USER | administrator
+TALEND_MDM_PWD | administrator
+TALEND_DSC_OUTPUT_URL | http://localhost:8180/talendmdm/services/dsctaskloader
+TALEND_DSC_INPUT_URL | http://localhost:8180/talendmdm/services/TDSCWS?wsdl
+TALEND_DSC_USER | user
+TALEND_MDM_BATTERYLIFTTRUCK_DB | BatteryLiftTruckMatch
+
+
+******TALEND_MDM_URL | http://winaptalnd2:8180/talendmdm/services/soap		
+******TALEND_MDM_USER | administrator
+******TALEND_MDM_PWD | administrator
+******TALEND_DSC_OUTPUT_URL | http://winaptalnd2:8180/talendmdm/services/dsctaskloader
+******TALEND_DSC_INPUT_URL | http://winaptalnd2:8180/talendmdm/services/TDSCWS?wsdl
+******TALEND_DSC_USER | user
+******TALEND_MDM_BATTERYLIFTTRUCK_DB | BatteryLiftTruckMatch
+
+
+******************* AS400 DATABASE SETTTINGS ********************
+******AM_JDE_INT_Server | MS5705A4.INSIDEEXIDE.com
+******AM_JDE_INT_Database | cusdataint
+******AM_JDE_INT_Database2 | intdata
+******AM_JDE_INT_Login | talendint
+******AM_JDE_INT_Password | tint2batch
+
+
+AM_JDE_INT_Server | MS5703A4.INSIDEEXIDE.com
+AM_JDE_INT_Database | cusdatap
+AM_JDE_INT_Database2 | prddata
+AM_JDE_INT_Login | talendprd
+AM_JDE_INT_Password | tprd4batch
+
+
+
+

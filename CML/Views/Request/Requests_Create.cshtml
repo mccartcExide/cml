@@ -1,0 +1,349 @@
+﻿@model CML.Models.CMLRequest
+
+
+@Html.AntiForgeryToken()
+
+@*<div class="form-horizontal">*@
+
+<div class="form-head">
+    Create New CML Request
+    <hr />
+</div>
+@*<div class="scroll">*@
+    <form id="requestsForm"  method="post" action="/Request/Requests_Create">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <table class="table req-new">
+            <tr>
+                <td style="width:50%;" colspan="2">
+
+
+                    <div class="form-group">
+
+
+
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        <div class="col-md-10">
+
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control ", @width = "550px;" } })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td style="width:50%;">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CMLNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CMLNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CMLNumber)
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StatusID,  htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextBox("Status", "Open", new { @disabled = "disabled" })
+
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LocationID,  htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @(Html.Kendo().DropDownListFor(model => model.LocationID)
+                                                    .Name("LocationID")
+                                                    .OptionLabel("Please Select")
+                                                    .DataTextField("Text")
+                                                    .DataValueField("Value")
+                                                  .BindTo(ViewData["locationsddl"] as SelectList)
+                            )
+                            @Html.ValidationMessageFor(model => model.LocationID)
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PriorityID,  htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @(Html.Kendo().DropDownListFor(model => model.PriorityID)
+                                                                        .Name("PriorityID")
+                                                                         .OptionLabel("Please Select")
+                                                                            .DataTextField("Text")
+                                                                            .DataValueField("Value")
+                                                                           .BindTo(ViewData["priorityddl"] as SelectList)
+                            )
+                            @Html.ValidationMessageFor(model => model.PriorityID)
+                        </div>
+                    </div>
+
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RequestedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.RequestedBy, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.RequestedBy)
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.RequestTypeID,  htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @(Html.Kendo().DropDownListFor(model => model.RequestTypeID)
+                                                               .Name("RequestTypeID")
+                                                                .OptionLabel("Please Select")
+                                                                   .DataTextField("Text")
+                                                                   .DataValueField("Value")
+                                                                  .BindTo(ViewData["request_typesddl"] as SelectList)
+                            )
+                            @Html.ValidationMessageFor(model => model.RequestTypeID)
+                        </div>
+                    </div>
+
+
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BusinessUnitID,  htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @(Html.Kendo().DropDownListFor(model => model.BusinessUnitID)
+                                                                        .Name("BusinessUnitID")
+                                                                         .OptionLabel("Please Select")
+                                                                            .DataTextField("Text")
+                                                                            .DataValueField("Value")
+                                                                            .BindTo(ViewData["businessunitddl"] as SelectList)
+                            )
+                            @Html.ValidationMessageFor(model => model.BusinessUnitID)
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.DispositionID,  htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @(Html.Kendo().DropDownListFor(model => model.DispositionID)
+                                                               .Name("DispositionID")
+                                                                .OptionLabel("Please Select")
+                                                                   .DataTextField("Text")
+                                                                   .DataValueField("Value")
+                                                                  .BindTo(ViewData["dispositionddl"] as SelectList)
+                                                                  .Events(ev => { ev.Change("dispChange"); })
+                            )
+                            @Html.ValidationMessageFor(model => model.DispositionID)
+                        </div>
+                    </div>
+
+                    <div class="form-group retention" style="display:inline;">
+                        @Html.LabelFor(model => model.RetentionDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.RetentionDate, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.RetentionDate)
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ProjectNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ProjectNumber)
+                        </div>
+                    </div>
+
+
+                </td>
+                <td>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Phone)
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DeviationNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DeviationNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DeviationNumber)
+                        </div>
+                    </div>
+
+
+
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EWRNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.EWRNumber, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.EWRNumber)
+                        </div>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TestObjectives, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                          @*  @Html.Kendo().TextBoxFor(model => model.TestObjectives).HtmlAttributes( new { @rows="5", @cols="100"})*@
+                            @*@Html.EditorFor(model => model.TestObjectives, new { htmlAttributes = new { @class = "form-control", rows="5",cols="80" } })*@
+                            
+                            @Html.TextAreaFor(model => model.TestObjectives, new { style="width:100%;", @rows = "5", @cols = "100" } )
+                           
+                            @Html.ValidationMessageFor(model => model.TestObjectives)
+                        </div>
+                    </div>
+                </td>
+
+
+            </tr>
+
+
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="status"></div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </form>
+    @*</div>*@
+
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+@*</div>*@
+
+    <script>
+        $(document).ready(function () {
+            $(".retention").hide(true);
+            //$("#DispositionID").change("dispChange");
+        });
+
+        function dispChange(e) {
+           //alert('hello');
+            var dataItem = this.dataItem(e.item);
+            if (dataItem.Text == 'Retain') {
+                $(".retention").show();
+            } else {
+                $(".retention").hide();
+            }
+        }
+        $(function () {
+           
+            var validator = $("#requestsForm").kendoValidator().data("kendoValidator");
+            var status2 = $(".status");
+
+            $("requestsForm").submit(function (event) {
+                event.preventDefault();
+                if (validator.validate()) {
+                    status2.text("Hooray! Your tickets has been booked!")
+                        .removeClass("invalid")
+                        .addClass("valid");
+
+                } else {
+                    status.text("Oops! There is invalid data in the form.")
+                        .removeClass("valid")
+                        .addClass("invalid");
+                }
+            });
+        });
+    </script>
+    @*<style>
+        #fieldlist {
+            margin: 0;
+            padding: 0;
+        }
+
+            #fieldlist li {
+                list-style: none;
+                padding-bottom: .7em;
+                text-align: left;
+            }
+
+            #fieldlist label {
+                display: block;
+                padding-bottom: .3em;
+                font-weight: bold;
+                text-transform: uppercase;
+                font-size: 12px;
+                color: #444;
+            }
+
+            #fieldlist li.status {
+                text-align: center;
+            }
+
+            #fieldlist li .k-widget:not(.k-tooltip),
+            #fieldlist li .k-textbox {
+                margin: 0 5px 5px 0;
+            }
+
+        .confirm {
+            padding-top: 1em;
+        }
+
+        .valid {
+            color: green;
+        }
+
+        .invalid {
+            color: red;
+        }
+
+        #fieldlist li input[type="checkbox"] {
+            margin: 0 5px 0 0;
+        }
+
+        /*span.k-widget.k-tooltip-validation {
+            display: inline-block;
+            width:auto;
+            text-align: left;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            background: none;
+            box-shadow: none;
+            color: red;
+        }*/
+
+        .k-tooltip-validation .k-warning {
+            display: none;
+        }
+    </style>*@

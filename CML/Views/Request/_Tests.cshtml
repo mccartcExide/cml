@@ -1,0 +1,53 @@
+﻿@(Html.Kendo().Grid<CML.Models.TestModel>()
+          .Name("testgrid")
+          .Columns(columns =>
+          {
+              columns.Bound(c => c.TestID).Width(80).ClientTemplate(Html.ActionLink("#=TestID#","GetTest","Test",new {id = "#=TestID#", req="#=CMLRequest#" },new { @class="k-button k-primary"}).ToHtmlString());
+              columns.Bound(c => c.CMLRequest).Width(80);
+              columns.Bound(c => c.Abbrev).Width(80);
+              columns.Bound(c => c.Name);
+              columns.Bound(c => c.SampleType);
+              columns.ForeignKey(c => c.StatusID, (System.Collections.IEnumerable)ViewData["statuses"], "ID", "Status").Width(100); ;
+              columns.ForeignKey(c => c.AssignedTo, (System.Collections.IEnumerable)ViewData["testers"], "ID", "DisplayName");
+              //columns.Bound(c => c.CML_User.DisplayName);
+          })
+          .ToolBar(toolbar =>
+          {
+              toolbar.Excel();
+              
+          })
+          .ColumnMenu()
+          .Pageable()
+          .Navigatable()
+          .Selectable(selectable =>
+          {
+              selectable.Mode(GridSelectionMode.Single);
+              selectable.Type(GridSelectionType.Row);
+          })
+          .Sortable(sortable =>
+          {
+              sortable.SortMode(GridSortMode.SingleColumn);
+          })
+          .Filterable()
+          .Scrollable()
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Read(read => read.Action("Tests_Read", "Request").Data("GetReqID"))
+          )
+          .HtmlAttributes(new { style = "height:550px;" })
+
+)
+<script>
+    function showDetails(e) {
+        
+        e.preventDefault();
+        
+        var dataitem = this.dataItem($(e.currentTarget).closest("tr"));
+        
+        window.location.href = "Test/GetTest?id=" + dataitem["TestID"]
+
+    }
+    function GetReqID() {
+        return { reqid: $('#RequestID').val() };
+    }
+</script>

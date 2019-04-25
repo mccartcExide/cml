@@ -1,0 +1,29 @@
+﻿<div class="content-wrapper">
+    @(Html.Kendo().Grid<CML.Models.PriorityModel>()
+              .Name("grid")
+              .Columns(columns =>
+              {
+                  columns.Bound(c => c.Priority);
+                  columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+              })
+              .ToolBar(toolbar =>
+              {
+                  toolbar.Create();
+              })
+              .Editable(editable => editable.Mode(GridEditMode.PopUp))
+              .Scrollable()
+               .Pageable(pageable => pageable
+                            .Refresh(true)
+                            .PageSizes(true)
+                            .ButtonCount(5))
+              .HtmlAttributes(new { style = "height: 450px;" })
+              .DataSource(dataSource => dataSource
+                  .Ajax()
+                  .Model(model => model.Id(p => p.ID))
+                  .Read(read => read.Action("CML_Priority_Read", "Priority"))
+                  .Create(create => create.Action("CML_Priority_Create", "Priority"))
+                  .Update(update => update.Action("CML_Priority_Update", "Priority"))
+                  .Destroy(destroy => destroy.Action("CML_Priority_Destroy", "Priority"))
+              )
+    )
+</div>

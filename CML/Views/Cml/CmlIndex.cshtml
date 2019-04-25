@@ -1,0 +1,49 @@
+﻿
+@(Html.Kendo().Grid<CML.Models.Request>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.Name);
+        columns.Bound(c => c.CMLNumber);
+        columns.Bound(c => c.RequestedBy);
+        columns.Bound(c => c.ProjectNumber);
+        columns.Bound(c => c.DeviationNumber);
+        columns.Bound(c => c.EWRNumber);
+        columns.Bound(c => c.DirectorApprovalRequired);
+        columns.Bound(c => c.RetentionDate);
+        columns.Bound(c => c.Phone);
+        columns.Bound(c => c.TestObjectives);
+        columns.Bound(c => c.CreatedOn);
+        columns.Bound(c => c.DateRequired);
+        columns.Bound(c => c.CreatedBy);
+        columns.Bound(c => c.UpdateOn);
+        columns.Bound(c => c.UpdatedBy);
+        columns.Bound(c => c.TestsStarted);
+        columns.Bound(c => c.TestsFinished);
+        columns.Command(command => { command.Edit(); }).Width(180);
+      })
+      .ToolBar(toolbar => {
+            toolbar.Create();
+            toolbar.Excel();
+      })
+      .ColumnMenu()
+      .Editable(editable => editable.Mode(GridEditMode.PopUp))
+      .Pageable()
+      .Navigatable()
+      .Selectable(selectable => {
+            selectable.Mode(GridSelectionMode.Single);
+            selectable.Type(GridSelectionType.Row);
+      })
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p => p.RequestID))
+          .Read(read => read.Action("Requests_Read", "Cml"))
+          .Create(create => create.Action("Requests_Create", "Cml"))
+          .Update(update => update.Action("Requests_Update", "Cml"))
+      )
+)

@@ -1,0 +1,34 @@
+﻿
+@(Html.Kendo().Grid<CML.Models.RoleTypeModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.RoleType);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+      })
+      .ToolBar(toolbar => {
+            toolbar.Create();
+            toolbar.Excel();
+      })
+      .ColumnMenu()
+      .Editable(editable => editable.Mode(GridEditMode.InLine))
+      .Pageable()
+      .Navigatable()
+      .Selectable(selectable => {
+            selectable.Mode(GridSelectionMode.Single);
+            selectable.Type(GridSelectionType.Row);
+      })
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p => p.ID))
+          .Read(read => read.Action("CML_RoleType_Read", "RoleType"))
+          .Create(create => create.Action("CML_RoleType_Create", "RoleType"))
+          .Update(update => update.Action("CML_RoleType_Update", "RoleType"))
+          .Destroy(destroy => destroy.Action("CML_RoleType_Destroy", "RoleType"))
+      )
+)

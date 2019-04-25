@@ -1,0 +1,77 @@
+﻿<div class="btn btn-primary" style=" width:140px;">
+
+    @(Html.Kendo().Button()
+                        .Name("primaryTextButton")
+                        .HtmlAttributes(new { type = "button", @class = "k-primary", style = "padding-bottom:10px;" })
+                        .Content("Create New Request")
+                        .Events(ev => ev.Click("CreateNew")))
+
+    
+
+    @*<a href="@(Url.Action("CreateNew","Request"))">Create New Request</a>*@
+</div>
+
+
+@*@(Html.Kendo().Button()
+    .Name("btnCreate")
+    .HtmlAttributes( new { type = "button",@class = "k-primary"})
+    .Content("Create New Request")
+    .Events(ev => ev.Click("onClick"))
+    )*@
+
+@(Html.Kendo().Grid<CML.Models.CMLRequest>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Command(command => command.Custom("View").Click("showDetails"));
+          columns.Bound(c => c.CMLNumber);
+          columns.Bound(c => c.Name);
+          columns.ForeignKey(l => l.StatusID, (System.Collections.IEnumerable)ViewData["statuses"], "ID", "Status")
+            .Title("Status").Width(200);
+          columns.ForeignKey(l => l.LocationID , (System.Collections.IEnumerable)ViewData["locations"], "LocationID", "Location")
+            .Title("Location").Width(200);
+         // columns.Bound(c => c.AssignedTo);
+          columns.ForeignKey(c => c.AssignedTo, (System.Collections.IEnumerable)ViewData["assignee"], "ID", "DisplayName")
+          .Title("Assigned To").Width(200);
+          columns.ForeignKey(l => l.RequestTypeID, (System.Collections.IEnumerable)ViewData["request_types"], "ID", "RequestType")
+            .Title("Request Type").Width(200);
+          columns.Bound(c => c.CreatedOn).Format("{0:MM/dd/yyyy}");
+          columns.Bound(c => c.DateRequired).Format("{0:MM/dd/yyyy}");
+
+      })
+      .ToolBar(toolbar => {
+
+          toolbar.Excel();
+      })
+      .Editable(editable => editable.Mode(GridEditMode.PopUp))
+      .ColumnMenu()
+      .Pageable()
+      .Navigatable()
+      .Selectable(selectable => {
+          selectable.Mode(GridSelectionMode.Single);
+          selectable.Type(GridSelectionType.Row);
+      })
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.MultipleColumn);
+      })
+      .Filterable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p=> p.RequestID))
+          .Read(read => read.Action("Requests_Read", "Request"))
+
+
+      )
+      )
+<script>
+    function CreateNew(e) {
+        window.location.href = "Request/Requests_Create";
+    }
+    function showDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "Request/Edit?id=" + dataItem["RequestID"];
+
+    }
+    
+</script>

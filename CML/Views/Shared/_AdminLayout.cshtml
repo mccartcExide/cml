@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>CML Requests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="@Url.Content("~/Content/kendo/2019.1.220/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2019.1.220/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2019.1.220/kendo.metro.min.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/kendo/2019.1.220/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2019.1.220/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2019.1.220/kendo.all.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2019.1.220/kendo.aspnetmvc.min.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/kendo.modernizr.custom.js")"></script>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <!--open container-->
+        <div class="row row-offcanvas row-offcanvas-left">
+            <!--open row-->
+            <div id="nav-section" class="col-xs-12 column">
+                <!--open nav column-->
+                <div class="navbar-default">
+                    @*<button id="toggle-button" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>*@
+                </div>
+                <h1 id="dash-logo" class="center-block">CML Requests Management</h1>
+                <div class="collapse navbar-collapse" id="sidebar-nav" role="navigation">
+                    <ul class="nav">
+                        <li id="CMLRequests"><a href="@(Url.Action("Index","Home"))"><span class="icon icon-chart-column"></span>CML Requests</a></li>
+                        <li id="Tests"><a href="#"><span class="icon icon-star-empty"></span>Tests</a></li>
+                        <li id="Dashboard"><a href="#"><span class="icon icon-faves"></span>Dashboard</a></li>
+                        <li id="Admin"><a href="#"><span class="icon icon-info"></span>Admin</a></li>
+                    </ul>
+                    <div id="rights">
+                        <p>Copyright &copy; 2019, Exide Technologies and/or its subsidiaries or affiliates. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div><!--close left column-->
+            <div id="main-section" class="col-xs-12 column">
+                <div class="Dash-Bar">
+                    <h2>  Dashboard widgets go across here. </h2>
+                </div>
+
+
+                <div>
+                    @(Html.Kendo().Menu()
+                                        .Name("AdminMenu")
+                                        .Items(inner =>
+                                        {
+                                            inner.Add()
+                                            .Text("Test Definitions")
+                                                        .Action("Index", "TestDefinition", null);
+                                            inner.Add()
+                                           .Text("Business Unit")
+                                           .Action("Index", "BusinessUnit", null);
+                                            inner.Add()
+                                           .Text("Disposition")
+                                           .Action("Index", "Disposition", null);
+                                            inner.Add()
+                                            .Text("Location")
+                                            .Action("Index", "Location", null);
+                                            inner.Add()
+                                            .Text("Priority")
+                                            .Action("Index", "Priority", null);
+                                            inner.Add()
+                                            .Text("Request Type")
+                                            .Action("Index", "RequestType", null);
+                                            inner.Add()
+                                            .Text("Status")
+                                            .Action("Index", "Status", null);
+                                            inner.Add()
+                                            .Text("Role Type")
+                                            .Action("Index", "RoleType", null);
+                                            inner.Add()
+                                            .Text("User")
+                                            .Action("Index", "User", null);
+                                        }
+                                        )
+                    )
+
+                </div><!-- End Menu  -->
+                <br />
+                <!--open main column-->
+                @RenderBody()
+            </div><!--close main column-->
+        </div><!--close row-->
+    </div><!--close container-->
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle=offcanvas]').click(function () {
+                $('.row-offcanvas').toggleClass('active');
+            });
+        });
+    </script>
+</body>
+</html>

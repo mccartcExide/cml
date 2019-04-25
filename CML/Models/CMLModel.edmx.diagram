@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="946be1f67a2342dc8a15cb87a0e16b7e" Name="Diagram1" ZoomLevel="71">
+        <EntityTypeShape EntityType="CMLModel.CML_Approvals" Width="1.5" PointX="7.5" PointY="5.875" />
+        <EntityTypeShape EntityType="CMLModel.CML_Attachments" Width="1.5" PointX="7.5" PointY="9.875" />
+        <EntityTypeShape EntityType="CMLModel.CML_BusinessUnit" Width="1.5" PointX="3" PointY="21.25" />
+        <EntityTypeShape EntityType="CMLModel.CML_Disposition" Width="1.5" PointX="3" PointY="14.25" />
+        <EntityTypeShape EntityType="CMLModel.CML_Location" Width="1.5" PointX="3" PointY="11.875" />
+        <EntityTypeShape EntityType="CMLModel.CML_Priority" Width="1.5" PointX="3" PointY="19" />
+        <EntityTypeShape EntityType="CMLModel.CML_RequestType" Width="1.5" PointX="3" PointY="16.625" />
+        <EntityTypeShape EntityType="CMLModel.CML_Status" Width="1.5" PointX="3" PointY="9.625" />
+        <EntityTypeShape EntityType="CMLModel.CML_TestDefinition" Width="1.5" PointX="8.25" PointY="2" />
+        <EntityTypeShape EntityType="CMLModel.Request" Width="1.5" PointX="5.25" PointY="3.125" />
+        <EntityTypeShape EntityType="CMLModel.Sample" Width="1.5" PointX="12.75" PointY="6.375" />
+        <EntityTypeShape EntityType="CMLModel.Test" Width="1.5" PointX="10.5" PointY="5.75" />
+        <AssociationConnector Association="CMLModel.FK_CML_Approvals_Request" />
+        <AssociationConnector Association="CMLModel.FK_CML_Attachments_Request" />
+        <AssociationConnector Association="CMLModel.FK_Request_BusinessUnit" />
+        <AssociationConnector Association="CMLModel.FK_Request_Disposition" />
+        <AssociationConnector Association="CMLModel.FK_Request_Location" />
+        <AssociationConnector Association="CMLModel.FK_Request_Priority" />
+        <AssociationConnector Association="CMLModel.FK_Request_RequestType" />
+        <AssociationConnector Association="CMLModel.FK_Request_Status" />
+        <AssociationConnector Association="CMLModel.FK_Test_CML_TestDefinition" />
+        <AssociationConnector Association="CMLModel.FK_Request_Request" />
+        <AssociationConnector Association="CMLModel.FK_Test_Request" />
+        <AssociationConnector Association="CMLModel.FK_Samples_Test" />
+        <EntityTypeShape EntityType="CMLModel.CML_RoleType" Width="1.5" PointX="10.375" PointY="1.375" />
+        <EntityTypeShape EntityType="CMLModel.CML_User" Width="1.5" PointX="14.75" PointY="0.875" />
+        <AssociationConnector Association="CMLModel.FK_CML_User_CML_RoleType" />
+        <AssociationConnector Association="CMLModel.FK_Request_CML_User" />
+        <AssociationConnector Association="CMLModel.FK_Test_CML_User" />
+        <AssociationConnector Association="CMLModel.FK_Test_CML_Status" />
+        <EntityTypeShape EntityType="CMLModel.Note" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="CMLModel.CML_SampleType" Width="1.5" PointX="17" PointY="3.875" />
+        <AssociationConnector Association="CMLModel.FK_CML_Attachments_Test" />
+        <AssociationConnector Association="CMLModel.FK_Samples_CML_SampleType" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

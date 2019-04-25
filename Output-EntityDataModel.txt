@@ -1,0 +1,6 @@
+﻿Generated model file: CMLModel.edmx.
+Loading metadata from the database took 00:00:00.7816105.
+Generating the model took 00:00:01.7641561.
+Generated model file: CMLModel.edmx.
+Loading metadata from the database took 00:00:00.5904912.
+Generating the model took 00:00:00.3992962.

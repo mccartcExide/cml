@@ -1,0 +1,47 @@
+﻿
+
+@(Html.Kendo().Grid<CML.Models.TestModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Command(c => c.Custom("View").Click("showDetails")).Width(80);
+          columns.Bound(c => c.TestID).Width(80);
+          columns.Bound(c => c.CMLRequest).Width(80);
+          columns.Bound(c => c.Abbrev).Width(80);
+          columns.Bound(c => c.Name);
+          columns.Bound(c => c.SampleType);
+          columns.ForeignKey(c => c.StatusID, (System.Collections.IEnumerable)ViewData["statuses"], "ID", "Status").Width(100); ;
+          columns.ForeignKey(c => c.AssignedTo, (System.Collections.IEnumerable)ViewData["testers"], "ID", "DisplayName");
+          //columns.Bound(c => c.CML_User.DisplayName);
+      })
+      .ToolBar(toolbar => {
+          toolbar.Excel();
+      })
+      .ColumnMenu()
+      .Pageable()
+      .Navigatable()
+      .Selectable(selectable => {
+          selectable.Mode(GridSelectionMode.Single);
+          selectable.Type(GridSelectionType.Row);
+      })
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("Tests_Read", "Test"))
+      )
+      .Groupable()
+      .HtmlAttributes(new {style ="height:550px;"})
+)
+<script>
+    function showDetails(e) {
+       
+        e.preventDefault();
+        var dataitem = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "Test/GetTestView?id=" + dataitem["TestID"]
+
+    }
+</script>

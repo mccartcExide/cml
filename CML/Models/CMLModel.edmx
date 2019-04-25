@@ -1,0 +1,1302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CMLModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CML_Approvals">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Outcome" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateAssigned" Type="datetime" />
+          <Property Name="DateActioned" Type="datetime" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="2000" />
+          <Property Name="RequestID" Type="int" />
+        </EntityType>
+        <EntityType Name="CML_Attachments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="UploadedFile" Type="image" />
+          <Property Name="RequestID" Type="int" />
+          <Property Name="TestID" Type="int" />
+        </EntityType>
+        <EntityType Name="CML_BusinessUnit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BusinessUnit" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CML_Disposition">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Disposition" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CML_Location">
+          <Key>
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="LocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Location" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CML_Priority">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Priority" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CML_RequestType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RequestType" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CML_RoleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleType" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CML_SampleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SampleType" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CML_Status">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CML_TestDefinition">
+          <Key>
+            <PropertyRef Name="TestDefinitionID" />
+          </Key>
+          <Property Name="TestDefinitionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Abbrev" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Determines" Type="nvarchar(max)" />
+          <Property Name="SampleType" Type="nvarchar" MaxLength="50" />
+          <Property Name="RequiredSampleSize" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="CML_User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="RoleTypeID" Type="int" Nullable="false" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="int" Nullable="false" />
+          <Property Name="NoteType" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="NoteText" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="RequestID" />
+          </Key>
+          <Property Name="RequestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="CMLNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="RequestedBy" Type="int" />
+          <Property Name="BusinessUnitID" Type="int" Nullable="false" />
+          <Property Name="ProjectNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DeviationNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EWRNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DirectorApprovalRequired" Type="bit" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="PriorityID" Type="int" Nullable="false" />
+          <Property Name="DispositionID" Type="int" Nullable="false" />
+          <Property Name="RetentionDate" Type="date" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="18" Nullable="false" />
+          <Property Name="TestObjectives" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="DateRequired" Type="date" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="TestsStarted" Type="datetime" />
+          <Property Name="TestsFinished" Type="datetime" />
+          <Property Name="RequestTypeID" Type="int" Nullable="false" />
+          <Property Name="AssignedTo" Type="int" />
+          <Property Name="TotalSamples" Type="int" />
+        </EntityType>
+        <EntityType Name="Samples">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TestID" Type="int" />
+          <Property Name="NegComment" Type="nvarchar" MaxLength="1000" />
+          <Property Name="NegOtherID" Type="nvarchar" MaxLength="100" />
+          <Property Name="NegOtherNumber" Type="int" />
+          <Property Name="NegStandardIDs" Type="nvarchar" MaxLength="100" />
+          <Property Name="NegStandardNbr" Type="int" />
+          <Property Name="NegTMBIds" Type="nvarchar" MaxLength="100" />
+          <Property Name="NegTMBNbr" Type="int" />
+          <Property Name="Number" Type="int" />
+          <Property Name="OxideType" Type="nvarchar" MaxLength="50" />
+          <Property Name="PosComment" Type="nvarchar" MaxLength="1000" />
+          <Property Name="PosOtherID" Type="nvarchar" MaxLength="100" />
+          <Property Name="PosOtherNumber" Type="int" />
+          <Property Name="PosStandardIDs" Type="nvarchar" MaxLength="100" />
+          <Property Name="PosStandardNbr" Type="int" />
+          <Property Name="PosTMBIds" Type="nvarchar" MaxLength="100" />
+          <Property Name="PosTMBNbr" Type="int" />
+          <Property Name="SampleDesc" Type="nvarchar" MaxLength="100" />
+          <Property Name="SampleIDs" Type="nvarchar" MaxLength="100" />
+          <Property Name="SampleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SeperatorType" Type="nvarchar" MaxLength="50" />
+          <Property Name="TotalSamples" Type="int" />
+          <Property Name="SampleType" Type="int" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="TestID" />
+          </Key>
+          <Property Name="TestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CMLRequest" Type="int" />
+          <Property Name="TestDef" Type="int" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="200" />
+          <Property Name="UpdatedOn" Type="datetime" />
+          <Property Name="AssignedTo" Type="int" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="2000" />
+          <Property Name="TotalSamples" Type="int" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="TestStarted" Type="datetime" />
+          <Property Name="TestFinished" Type="datetime" />
+          <Property Name="SamplePreparations" Type="nvarchar" MaxLength="50" />
+          <Property Name="SampleAnalysis" Type="nvarchar" MaxLength="50" />
+          <Property Name="DataAnalysis" Type="nvarchar" MaxLength="50" />
+          <Property Name="Reports" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cleaning" Type="nvarchar" MaxLength="50" />
+          <Property Name="Total" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="150" />
+          <Property Name="Abbrev" Type="nvarchar" MaxLength="10" />
+          <Property Name="Determines" Type="nvarchar" MaxLength="1000" />
+          <Property Name="SampleType" Type="nvarchar" MaxLength="50" />
+          <Property Name="SampleSize" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <Association Name="FK_CML_Approvals_Request">
+          <End Role="Request" Type="Self.Request" Multiplicity="0..1" />
+          <End Role="CML_Approvals" Type="Self.CML_Approvals" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="CML_Approvals">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CML_Attachments_Request">
+          <End Role="Request" Type="Self.Request" Multiplicity="0..1" />
+          <End Role="CML_Attachments" Type="Self.CML_Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="CML_Attachments">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CML_Attachments_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="0..1" />
+          <End Role="CML_Attachments" Type="Self.CML_Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="CML_Attachments">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CML_User_CML_RoleType">
+          <End Role="CML_RoleType" Type="Self.CML_RoleType" Multiplicity="1" />
+          <End Role="CML_User" Type="Self.CML_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_RoleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CML_User">
+              <PropertyRef Name="RoleTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_BusinessUnit">
+          <End Role="CML_BusinessUnit" Type="Self.CML_BusinessUnit" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_BusinessUnit">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="BusinessUnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_CML_User">
+          <End Role="CML_User" Type="Self.CML_User" Multiplicity="0..1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Disposition">
+          <End Role="CML_Disposition" Type="Self.CML_Disposition" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Disposition">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="DispositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Location">
+          <End Role="CML_Location" Type="Self.CML_Location" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Location">
+              <PropertyRef Name="LocationID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Priority">
+          <End Role="CML_Priority" Type="Self.CML_Priority" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Priority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="PriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Request">
+          <End Role="Request" Type="Self.Request" Multiplicity="1" />
+          <End Role="Request1" Type="Self.Request" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="Request1">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_RequestType">
+          <End Role="CML_RequestType" Type="Self.CML_RequestType" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_RequestType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="RequestTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Status">
+          <End Role="CML_Status" Type="Self.CML_Status" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Samples_CML_SampleType">
+          <End Role="CML_SampleType" Type="Self.CML_SampleType" Multiplicity="0..1" />
+          <End Role="Samples" Type="Self.Samples" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_SampleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Samples">
+              <PropertyRef Name="SampleType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Samples_Test">
+          <End Role="Test" Type="Self.Test" Multiplicity="0..1" />
+          <End Role="Samples" Type="Self.Samples" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="Samples">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_CML_Status">
+          <End Role="CML_Status" Type="Self.CML_Status" Multiplicity="0..1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_CML_TestDefinition">
+          <End Role="CML_TestDefinition" Type="Self.CML_TestDefinition" Multiplicity="0..1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_TestDefinition">
+              <PropertyRef Name="TestDefinitionID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="TestDef" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_CML_User">
+          <End Role="CML_User" Type="Self.CML_User" Multiplicity="0..1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_Request">
+          <End Role="Request" Type="Self.Request" Multiplicity="0..1" />
+          <End Role="Test" Type="Self.Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="CMLRequest" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CMLModelStoreContainer">
+          <EntitySet Name="CML_Approvals" EntityType="Self.CML_Approvals" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_Attachments" EntityType="Self.CML_Attachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_BusinessUnit" EntityType="Self.CML_BusinessUnit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_Disposition" EntityType="Self.CML_Disposition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_Location" EntityType="Self.CML_Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_Priority" EntityType="Self.CML_Priority" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_RequestType" EntityType="Self.CML_RequestType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_RoleType" EntityType="Self.CML_RoleType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_SampleType" EntityType="Self.CML_SampleType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_Status" EntityType="Self.CML_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_TestDefinition" EntityType="Self.CML_TestDefinition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CML_User" EntityType="Self.CML_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Note" EntityType="Self.Note" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Request" EntityType="Self.Request" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Samples" EntityType="Self.Samples" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Test" EntityType="Self.Test" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CML_Approvals_Request" Association="Self.FK_CML_Approvals_Request">
+            <End Role="Request" EntitySet="Request" />
+            <End Role="CML_Approvals" EntitySet="CML_Approvals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CML_Attachments_Request" Association="Self.FK_CML_Attachments_Request">
+            <End Role="Request" EntitySet="Request" />
+            <End Role="CML_Attachments" EntitySet="CML_Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CML_Attachments_Test" Association="Self.FK_CML_Attachments_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="CML_Attachments" EntitySet="CML_Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CML_User_CML_RoleType" Association="Self.FK_CML_User_CML_RoleType">
+            <End Role="CML_RoleType" EntitySet="CML_RoleType" />
+            <End Role="CML_User" EntitySet="CML_User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_BusinessUnit" Association="Self.FK_Request_BusinessUnit">
+            <End Role="CML_BusinessUnit" EntitySet="CML_BusinessUnit" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_CML_User" Association="Self.FK_Request_CML_User">
+            <End Role="CML_User" EntitySet="CML_User" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Disposition" Association="Self.FK_Request_Disposition">
+            <End Role="CML_Disposition" EntitySet="CML_Disposition" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Location" Association="Self.FK_Request_Location">
+            <End Role="CML_Location" EntitySet="CML_Location" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Priority" Association="Self.FK_Request_Priority">
+            <End Role="CML_Priority" EntitySet="CML_Priority" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Request" Association="Self.FK_Request_Request">
+            <End Role="Request" EntitySet="Request" />
+            <End Role="Request1" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_RequestType" Association="Self.FK_Request_RequestType">
+            <End Role="CML_RequestType" EntitySet="CML_RequestType" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Status" Association="Self.FK_Request_Status">
+            <End Role="CML_Status" EntitySet="CML_Status" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Samples_CML_SampleType" Association="Self.FK_Samples_CML_SampleType">
+            <End Role="CML_SampleType" EntitySet="CML_SampleType" />
+            <End Role="Samples" EntitySet="Samples" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Samples_Test" Association="Self.FK_Samples_Test">
+            <End Role="Test" EntitySet="Test" />
+            <End Role="Samples" EntitySet="Samples" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_CML_Status" Association="Self.FK_Test_CML_Status">
+            <End Role="CML_Status" EntitySet="CML_Status" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_CML_TestDefinition" Association="Self.FK_Test_CML_TestDefinition">
+            <End Role="CML_TestDefinition" EntitySet="CML_TestDefinition" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_CML_User" Association="Self.FK_Test_CML_User">
+            <End Role="CML_User" EntitySet="CML_User" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_Request" Association="Self.FK_Test_Request">
+            <End Role="Request" EntitySet="Request" />
+            <End Role="Test" EntitySet="Test" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CMLModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CMLEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CML_Approvals" EntityType="CMLModel.CML_Approvals" />
+          <EntitySet Name="CML_Attachments" EntityType="CMLModel.CML_Attachments" />
+          <EntitySet Name="CML_BusinessUnit" EntityType="CMLModel.CML_BusinessUnit" />
+          <EntitySet Name="CML_Disposition" EntityType="CMLModel.CML_Disposition" />
+          <EntitySet Name="CML_Location" EntityType="CMLModel.CML_Location" />
+          <EntitySet Name="CML_Priority" EntityType="CMLModel.CML_Priority" />
+          <EntitySet Name="CML_RequestType" EntityType="CMLModel.CML_RequestType" />
+          <EntitySet Name="CML_Status" EntityType="CMLModel.CML_Status" />
+          <EntitySet Name="CML_TestDefinition" EntityType="CMLModel.CML_TestDefinition" />
+          <EntitySet Name="Requests" EntityType="CMLModel.Request" />
+          <EntitySet Name="Samples" EntityType="CMLModel.Sample" />
+          <EntitySet Name="Tests" EntityType="CMLModel.Test" />
+          <AssociationSet Name="FK_CML_Approvals_Request" Association="CMLModel.FK_CML_Approvals_Request">
+            <End Role="Request" EntitySet="Requests" />
+            <End Role="CML_Approvals" EntitySet="CML_Approvals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CML_Attachments_Request" Association="CMLModel.FK_CML_Attachments_Request">
+            <End Role="Request" EntitySet="Requests" />
+            <End Role="CML_Attachments" EntitySet="CML_Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_BusinessUnit" Association="CMLModel.FK_Request_BusinessUnit">
+            <End Role="CML_BusinessUnit" EntitySet="CML_BusinessUnit" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Disposition" Association="CMLModel.FK_Request_Disposition">
+            <End Role="CML_Disposition" EntitySet="CML_Disposition" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Location" Association="CMLModel.FK_Request_Location">
+            <End Role="CML_Location" EntitySet="CML_Location" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Priority" Association="CMLModel.FK_Request_Priority">
+            <End Role="CML_Priority" EntitySet="CML_Priority" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_RequestType" Association="CMLModel.FK_Request_RequestType">
+            <End Role="CML_RequestType" EntitySet="CML_RequestType" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Status" Association="CMLModel.FK_Request_Status">
+            <End Role="CML_Status" EntitySet="CML_Status" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_CML_TestDefinition" Association="CMLModel.FK_Test_CML_TestDefinition">
+            <End Role="CML_TestDefinition" EntitySet="CML_TestDefinition" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Request" Association="CMLModel.FK_Request_Request">
+            <End Role="Request" EntitySet="Requests" />
+            <End Role="Request1" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_Request" Association="CMLModel.FK_Test_Request">
+            <End Role="Request" EntitySet="Requests" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Samples_Test" Association="CMLModel.FK_Samples_Test">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="Sample" EntitySet="Samples" />
+          </AssociationSet>
+          <EntitySet Name="CML_RoleType" EntityType="CMLModel.CML_RoleType" />
+          <EntitySet Name="CML_User" EntityType="CMLModel.CML_User" />
+          <AssociationSet Name="FK_CML_User_CML_RoleType" Association="CMLModel.FK_CML_User_CML_RoleType">
+            <End Role="CML_RoleType" EntitySet="CML_RoleType" />
+            <End Role="CML_User" EntitySet="CML_User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_CML_User" Association="CMLModel.FK_Request_CML_User">
+            <End Role="CML_User" EntitySet="CML_User" />
+            <End Role="Request" EntitySet="Requests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_CML_User" Association="CMLModel.FK_Test_CML_User">
+            <End Role="CML_User" EntitySet="CML_User" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_CML_Status" Association="CMLModel.FK_Test_CML_Status">
+            <End Role="CML_Status" EntitySet="CML_Status" />
+            <End Role="Test" EntitySet="Tests" />
+          </AssociationSet>
+          <EntitySet Name="Notes" EntityType="CMLModel.Note" />
+          <EntitySet Name="CML_SampleType" EntityType="CMLModel.CML_SampleType" />
+          <AssociationSet Name="FK_CML_Attachments_Test" Association="CMLModel.FK_CML_Attachments_Test">
+            <End Role="Test" EntitySet="Tests" />
+            <End Role="CML_Attachments" EntitySet="CML_Attachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Samples_CML_SampleType" Association="CMLModel.FK_Samples_CML_SampleType">
+            <End Role="CML_SampleType" EntitySet="CML_SampleType" />
+            <End Role="Sample" EntitySet="Samples" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="CML_Approvals">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Outcome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateAssigned" Type="DateTime" Precision="3" />
+          <Property Name="DateActioned" Type="DateTime" Precision="3" />
+          <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="RequestID" Type="Int32" />
+          <NavigationProperty Name="Request" Relationship="CMLModel.FK_CML_Approvals_Request" FromRole="CML_Approvals" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="CML_Attachments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UploadedFile" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="RequestID" Type="Int32" />
+          <NavigationProperty Name="Request" Relationship="CMLModel.FK_CML_Attachments_Request" FromRole="CML_Attachments" ToRole="Request" />
+          <Property Name="TestID" Type="Int32" />
+          <NavigationProperty Name="Test" Relationship="CMLModel.FK_CML_Attachments_Test" FromRole="CML_Attachments" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="CML_BusinessUnit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BusinessUnit" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Requests" Relationship="CMLModel.FK_Request_BusinessUnit" FromRole="CML_BusinessUnit" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="CML_Disposition">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Disposition" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Requests" Relationship="CMLModel.FK_Request_Disposition" FromRole="CML_Disposition" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="CML_Location">
+          <Key>
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Location" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Requests" Relationship="CMLModel.FK_Request_Location" FromRole="CML_Location" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="CML_Priority">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Priority" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Requests" Relationship="CMLModel.FK_Request_Priority" FromRole="CML_Priority" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="CML_RequestType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RequestType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Requests" Relationship="CMLModel.FK_Request_RequestType" FromRole="CML_RequestType" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="CML_Status">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Requests" Relationship="CMLModel.FK_Request_Status" FromRole="CML_Status" ToRole="Request" />
+          <NavigationProperty Name="Tests" Relationship="CMLModel.FK_Test_CML_Status" FromRole="CML_Status" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="CML_TestDefinition">
+          <Key>
+            <PropertyRef Name="TestDefinitionID" />
+          </Key>
+          <Property Name="TestDefinitionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Abbrev" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Determines" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SampleType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RequiredSampleSize" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Tests" Relationship="CMLModel.FK_Test_CML_TestDefinition" FromRole="CML_TestDefinition" ToRole="Test" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="RequestID" />
+          </Key>
+          <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CMLNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="RequestedBy" Type="Int32" Nullable="true" />
+          <Property Name="BusinessUnitID" Type="Int32" Nullable="false" />
+          <Property Name="ProjectNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeviationNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EWRNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DirectorApprovalRequired" Type="Boolean" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="PriorityID" Type="Int32" Nullable="false" />
+          <Property Name="DispositionID" Type="Int32" Nullable="false" />
+          <Property Name="RetentionDate" Type="DateTime" Precision="0" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="18" FixedLength="false" Unicode="true" />
+          <Property Name="TestObjectives" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="DateRequired" Type="DateTime" Precision="0" />
+          <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TestsStarted" Type="DateTime" Precision="3" />
+          <Property Name="TestsFinished" Type="DateTime" Precision="3" />
+          <Property Name="RequestTypeID" Type="Int32" Nullable="false" />
+          <Property Name="AssignedTo" Type="Int32" />
+          <NavigationProperty Name="CML_Approvals" Relationship="CMLModel.FK_CML_Approvals_Request" FromRole="Request" ToRole="CML_Approvals" />
+          <NavigationProperty Name="CML_Attachments" Relationship="CMLModel.FK_CML_Attachments_Request" FromRole="Request" ToRole="CML_Attachments" />
+          <NavigationProperty Name="CML_BusinessUnit" Relationship="CMLModel.FK_Request_BusinessUnit" FromRole="Request" ToRole="CML_BusinessUnit" />
+          <NavigationProperty Name="CML_Disposition" Relationship="CMLModel.FK_Request_Disposition" FromRole="Request" ToRole="CML_Disposition" />
+          <NavigationProperty Name="CML_Location" Relationship="CMLModel.FK_Request_Location" FromRole="Request" ToRole="CML_Location" />
+          <NavigationProperty Name="CML_Priority" Relationship="CMLModel.FK_Request_Priority" FromRole="Request" ToRole="CML_Priority" />
+          <NavigationProperty Name="CML_RequestType" Relationship="CMLModel.FK_Request_RequestType" FromRole="Request" ToRole="CML_RequestType" />
+          <NavigationProperty Name="CML_Status" Relationship="CMLModel.FK_Request_Status" FromRole="Request" ToRole="CML_Status" />
+          <NavigationProperty Name="Request1" Relationship="CMLModel.FK_Request_Request" FromRole="Request" ToRole="Request1" />
+          <NavigationProperty Name="Request2" Relationship="CMLModel.FK_Request_Request" FromRole="Request1" ToRole="Request" />
+          <NavigationProperty Name="Tests" Relationship="CMLModel.FK_Test_Request" FromRole="Request" ToRole="Test" />
+          <NavigationProperty Name="CML_User" Relationship="CMLModel.FK_Request_CML_User" FromRole="Request" ToRole="CML_User" />
+          <Property Name="TotalSamples" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Sample">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TestID" Type="Int32" />
+          <NavigationProperty Name="Test" Relationship="CMLModel.FK_Samples_Test" FromRole="Sample" ToRole="Test" />
+          <Property Name="NegComment" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="NegOtherID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NegOtherNumber" Type="Int32" />
+          <Property Name="NegStandardIDs" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NegStandardNbr" Type="Int32" />
+          <Property Name="NegTMBIds" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NegTMBNbr" Type="Int32" />
+          <Property Name="Number" Type="Int32" />
+          <Property Name="OxideType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PosComment" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="PosOtherID" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PosOtherNumber" Type="Int32" />
+          <Property Name="PosStandardIDs" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PosStandardNbr" Type="Int32" />
+          <Property Name="PosTMBIds" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PosTMBNbr" Type="Int32" />
+          <Property Name="SampleDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SampleIDs" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SampleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SeperatorType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalSamples" Type="Int32" />
+          <Property Name="SampleType" Type="Int32" />
+          <NavigationProperty Name="CML_SampleType" Relationship="CMLModel.FK_Samples_CML_SampleType" FromRole="Sample" ToRole="CML_SampleType" />
+        </EntityType>
+        <EntityType Name="Test">
+          <Key>
+            <PropertyRef Name="TestID" />
+          </Key>
+          <Property Name="TestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CMLRequest" Type="Int32" />
+          <Property Name="TestDef" Type="Int32" />
+          <Property Name="CreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CML_TestDefinition" Relationship="CMLModel.FK_Test_CML_TestDefinition" FromRole="Test" ToRole="CML_TestDefinition" />
+          <NavigationProperty Name="Request" Relationship="CMLModel.FK_Test_Request" FromRole="Test" ToRole="Request" />
+          <NavigationProperty Name="Samples" Relationship="CMLModel.FK_Samples_Test" FromRole="Test" ToRole="Sample" />
+          <Property Name="AssignedTo" Type="Int32" />
+          <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="TotalSamples" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="TestStarted" Type="DateTime" Precision="3" />
+          <Property Name="TestFinished" Type="DateTime" Precision="3" />
+          <Property Name="SamplePreparations" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SampleAnalysis" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DataAnalysis" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Reports" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cleaning" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Total" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CML_User" Relationship="CMLModel.FK_Test_CML_User" FromRole="Test" ToRole="CML_User" />
+          <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Abbrev" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Determines" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="SampleType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SampleSize" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CML_Status" Relationship="CMLModel.FK_Test_CML_Status" FromRole="Test" ToRole="CML_Status" />
+          <NavigationProperty Name="CML_Attachments" Relationship="CMLModel.FK_CML_Attachments_Test" FromRole="Test" ToRole="CML_Attachments" />
+        </EntityType>
+        <Association Name="FK_CML_Approvals_Request">
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="0..1" />
+          <End Type="CMLModel.CML_Approvals" Role="CML_Approvals" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="CML_Approvals">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CML_Attachments_Request">
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="0..1" />
+          <End Type="CMLModel.CML_Attachments" Role="CML_Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="CML_Attachments">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_BusinessUnit">
+          <End Type="CMLModel.CML_BusinessUnit" Role="CML_BusinessUnit" Multiplicity="1" />
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_BusinessUnit">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="BusinessUnitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Disposition">
+          <End Type="CMLModel.CML_Disposition" Role="CML_Disposition" Multiplicity="1" />
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Disposition">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="DispositionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Location">
+          <End Type="CMLModel.CML_Location" Role="CML_Location" Multiplicity="1" />
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Location">
+              <PropertyRef Name="LocationID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Priority">
+          <End Type="CMLModel.CML_Priority" Role="CML_Priority" Multiplicity="1" />
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Priority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="PriorityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_RequestType">
+          <End Type="CMLModel.CML_RequestType" Role="CML_RequestType" Multiplicity="1" />
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_RequestType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="RequestTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Status">
+          <End Type="CMLModel.CML_Status" Role="CML_Status" Multiplicity="1" />
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_CML_TestDefinition">
+          <End Type="CMLModel.CML_TestDefinition" Role="CML_TestDefinition" Multiplicity="0..1" />
+          <End Type="CMLModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_TestDefinition">
+              <PropertyRef Name="TestDefinitionID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="TestDef" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Request">
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="1" />
+          <End Type="CMLModel.Request" Role="Request1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="Request1">
+              <PropertyRef Name="RequestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_Request">
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="0..1" />
+          <End Type="CMLModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Request">
+              <PropertyRef Name="RequestID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="CMLRequest" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Samples_Test">
+          <End Type="CMLModel.Test" Role="Test" Multiplicity="0..1" />
+          <End Type="CMLModel.Sample" Role="Sample" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="Sample">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CML_RoleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CML_User" Relationship="CMLModel.FK_CML_User_CML_RoleType" FromRole="CML_RoleType" ToRole="CML_User" />
+        </EntityType>
+        <EntityType Name="CML_User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="RoleTypeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CML_RoleType" Relationship="CMLModel.FK_CML_User_CML_RoleType" FromRole="CML_User" ToRole="CML_RoleType" />
+          <NavigationProperty Name="Requests" Relationship="CMLModel.FK_Request_CML_User" FromRole="CML_User" ToRole="Request" />
+          <Property Name="DisplayName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Tests" Relationship="CMLModel.FK_Test_CML_User" FromRole="CML_User" ToRole="Test" />
+        </EntityType>
+        <Association Name="FK_CML_User_CML_RoleType">
+          <End Type="CMLModel.CML_RoleType" Role="CML_RoleType" Multiplicity="1" />
+          <End Type="CMLModel.CML_User" Role="CML_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_RoleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CML_User">
+              <PropertyRef Name="RoleTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_CML_User">
+          <End Type="CMLModel.CML_User" Role="CML_User" Multiplicity="0..1" />
+          <End Type="CMLModel.Request" Role="Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_CML_User">
+          <End Type="CMLModel.CML_User" Role="CML_User" Multiplicity="0..1" />
+          <End Type="CMLModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_CML_Status">
+          <End Type="CMLModel.CML_Status" Role="CML_Status" Multiplicity="0..1" />
+          <End Type="CMLModel.Test" Role="Test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_Status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Test">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoteType" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ParentID" Type="Int32" Nullable="false" />
+          <Property Name="NoteText" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CML_SampleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SampleType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Samples" Relationship="CMLModel.FK_Samples_CML_SampleType" FromRole="CML_SampleType" ToRole="Sample" />
+        </EntityType>
+        <Association Name="FK_CML_Attachments_Test">
+          <End Type="CMLModel.Test" Role="Test" Multiplicity="0..1" />
+          <End Type="CMLModel.CML_Attachments" Role="CML_Attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="CML_Attachments">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Samples_CML_SampleType">
+          <End Type="CMLModel.CML_SampleType" Role="CML_SampleType" Multiplicity="0..1" />
+          <End Type="CMLModel.Sample" Role="Sample" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CML_SampleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Sample">
+              <PropertyRef Name="SampleType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CMLModelStoreContainer" CdmEntityContainer="CMLEntities">
+          <EntitySetMapping Name="CML_Approvals">
+            <EntityTypeMapping TypeName="CMLModel.CML_Approvals">
+              <MappingFragment StoreEntitySet="CML_Approvals">
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="DateActioned" ColumnName="DateActioned" />
+                <ScalarProperty Name="DateAssigned" ColumnName="DateAssigned" />
+                <ScalarProperty Name="Outcome" ColumnName="Outcome" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_Attachments">
+            <EntityTypeMapping TypeName="CMLModel.CML_Attachments">
+              <MappingFragment StoreEntitySet="CML_Attachments">
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="UploadedFile" ColumnName="UploadedFile" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_BusinessUnit">
+            <EntityTypeMapping TypeName="CMLModel.CML_BusinessUnit">
+              <MappingFragment StoreEntitySet="CML_BusinessUnit">
+                <ScalarProperty Name="BusinessUnit" ColumnName="BusinessUnit" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_Disposition">
+            <EntityTypeMapping TypeName="CMLModel.CML_Disposition">
+              <MappingFragment StoreEntitySet="CML_Disposition">
+                <ScalarProperty Name="Disposition" ColumnName="Disposition" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_Location">
+            <EntityTypeMapping TypeName="CMLModel.CML_Location">
+              <MappingFragment StoreEntitySet="CML_Location">
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_Priority">
+            <EntityTypeMapping TypeName="CMLModel.CML_Priority">
+              <MappingFragment StoreEntitySet="CML_Priority">
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_RequestType">
+            <EntityTypeMapping TypeName="CMLModel.CML_RequestType">
+              <MappingFragment StoreEntitySet="CML_RequestType">
+                <ScalarProperty Name="RequestType" ColumnName="RequestType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_Status">
+            <EntityTypeMapping TypeName="CMLModel.CML_Status">
+              <MappingFragment StoreEntitySet="CML_Status">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_TestDefinition">
+            <EntityTypeMapping TypeName="CMLModel.CML_TestDefinition">
+              <MappingFragment StoreEntitySet="CML_TestDefinition">
+                <ScalarProperty Name="RequiredSampleSize" ColumnName="RequiredSampleSize" />
+                <ScalarProperty Name="SampleType" ColumnName="SampleType" />
+                <ScalarProperty Name="Determines" ColumnName="Determines" />
+                <ScalarProperty Name="Abbrev" ColumnName="Abbrev" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="TestDefinitionID" ColumnName="TestDefinitionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requests">
+            <EntityTypeMapping TypeName="CMLModel.Request">
+              <MappingFragment StoreEntitySet="Request">
+                <ScalarProperty Name="TotalSamples" ColumnName="TotalSamples" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="RequestTypeID" ColumnName="RequestTypeID" />
+                <ScalarProperty Name="TestsFinished" ColumnName="TestsFinished" />
+                <ScalarProperty Name="TestsStarted" ColumnName="TestsStarted" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdateOn" ColumnName="UpdateOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateRequired" ColumnName="DateRequired" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="TestObjectives" ColumnName="TestObjectives" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="RetentionDate" ColumnName="RetentionDate" />
+                <ScalarProperty Name="DispositionID" ColumnName="DispositionID" />
+                <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="DirectorApprovalRequired" ColumnName="DirectorApprovalRequired" />
+                <ScalarProperty Name="EWRNumber" ColumnName="EWRNumber" />
+                <ScalarProperty Name="DeviationNumber" ColumnName="DeviationNumber" />
+                <ScalarProperty Name="ProjectNumber" ColumnName="ProjectNumber" />
+                <ScalarProperty Name="BusinessUnitID" ColumnName="BusinessUnitID" />
+                <ScalarProperty Name="RequestedBy" ColumnName="RequestedBy" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CMLNumber" ColumnName="CMLNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Samples">
+            <EntityTypeMapping TypeName="CMLModel.Sample">
+              <MappingFragment StoreEntitySet="Samples">
+                <ScalarProperty Name="SampleType" ColumnName="SampleType" />
+                <ScalarProperty Name="TotalSamples" ColumnName="TotalSamples" />
+                <ScalarProperty Name="SeperatorType" ColumnName="SeperatorType" />
+                <ScalarProperty Name="SampleName" ColumnName="SampleName" />
+                <ScalarProperty Name="SampleIDs" ColumnName="SampleIDs" />
+                <ScalarProperty Name="SampleDesc" ColumnName="SampleDesc" />
+                <ScalarProperty Name="PosTMBNbr" ColumnName="PosTMBNbr" />
+                <ScalarProperty Name="PosTMBIds" ColumnName="PosTMBIds" />
+                <ScalarProperty Name="PosStandardNbr" ColumnName="PosStandardNbr" />
+                <ScalarProperty Name="PosStandardIDs" ColumnName="PosStandardIDs" />
+                <ScalarProperty Name="PosOtherNumber" ColumnName="PosOtherNumber" />
+                <ScalarProperty Name="PosOtherID" ColumnName="PosOtherID" />
+                <ScalarProperty Name="PosComment" ColumnName="PosComment" />
+                <ScalarProperty Name="OxideType" ColumnName="OxideType" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="NegTMBNbr" ColumnName="NegTMBNbr" />
+                <ScalarProperty Name="NegTMBIds" ColumnName="NegTMBIds" />
+                <ScalarProperty Name="NegStandardNbr" ColumnName="NegStandardNbr" />
+                <ScalarProperty Name="NegStandardIDs" ColumnName="NegStandardIDs" />
+                <ScalarProperty Name="NegOtherNumber" ColumnName="NegOtherNumber" />
+                <ScalarProperty Name="NegOtherID" ColumnName="NegOtherID" />
+                <ScalarProperty Name="NegComment" ColumnName="NegComment" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tests">
+            <EntityTypeMapping TypeName="CMLModel.Test">
+              <MappingFragment StoreEntitySet="Test">
+                <ScalarProperty Name="SampleSize" ColumnName="SampleSize" />
+                <ScalarProperty Name="SampleType" ColumnName="SampleType" />
+                <ScalarProperty Name="Determines" ColumnName="Determines" />
+                <ScalarProperty Name="Abbrev" ColumnName="Abbrev" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Cleaning" ColumnName="Cleaning" />
+                <ScalarProperty Name="Reports" ColumnName="Reports" />
+                <ScalarProperty Name="DataAnalysis" ColumnName="DataAnalysis" />
+                <ScalarProperty Name="SampleAnalysis" ColumnName="SampleAnalysis" />
+                <ScalarProperty Name="SamplePreparations" ColumnName="SamplePreparations" />
+                <ScalarProperty Name="TestFinished" ColumnName="TestFinished" />
+                <ScalarProperty Name="TestStarted" ColumnName="TestStarted" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="TotalSamples" ColumnName="TotalSamples" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TestDef" ColumnName="TestDef" />
+                <ScalarProperty Name="CMLRequest" ColumnName="CMLRequest" />
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_RoleType">
+            <EntityTypeMapping TypeName="CMLModel.CML_RoleType">
+              <MappingFragment StoreEntitySet="CML_RoleType">
+                <ScalarProperty Name="RoleType" ColumnName="RoleType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_User">
+            <EntityTypeMapping TypeName="CMLModel.CML_User">
+              <MappingFragment StoreEntitySet="CML_User">
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="RoleTypeID" ColumnName="RoleTypeID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notes">
+            <EntityTypeMapping TypeName="CMLModel.Note">
+              <MappingFragment StoreEntitySet="Note">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="NoteText" ColumnName="NoteText" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CML_SampleType">
+            <EntityTypeMapping TypeName="CMLModel.CML_SampleType">
+              <MappingFragment StoreEntitySet="CML_SampleType">
+                <ScalarProperty Name="SampleType" ColumnName="SampleType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

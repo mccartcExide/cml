@@ -1,0 +1,35 @@
+﻿@(Html.Kendo().Grid<CML.Models.SampleModel>()
+    .Name("SampleGrid")
+    .Columns(columns => {
+        columns.Bound( c => c.ID ).Width( 80 ).ClientTemplate( Html.ActionLink( "#=ID#", "GetSample", "Sample", new { id = "#=ID#", test = "#=TestID#" }, new { @class = "k-button k-primary" } ).ToHtmlString() );
+        columns.Bound( c => c.SampleName );
+        columns.Bound( c => c.TotalSamples );
+
+    }
+    )
+    .Pageable()
+    .Navigatable()
+    .Selectable( selectable =>
+    {
+        selectable.Mode( GridSelectionMode.Single );
+        selectable.Type( GridSelectionType.Row );
+    } )
+          .Sortable( sortable =>
+          {
+              sortable.SortMode( GridSortMode.SingleColumn );
+          } )
+          .Filterable()
+          .Scrollable()
+          .DataSource( dataSource => dataSource
+               .Ajax()
+               .Read( read => read.Action( "Samples_Read", "Test" ).Data( "GetTestID" ) )
+          )
+          .HtmlAttributes( new { style = "height:550px;" } )
+    )
+
+<script>
+
+    function GetTestID() {
+        return { testid: $('#TestID').val() };
+    }
+</script>

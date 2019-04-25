@@ -1,0 +1,65 @@
+﻿@model CML.Models.RequestedItem
+
+
+<h1>Select the test you wish to perform</h1>
+<br />
+
+@(Html.Kendo().Grid<CML.Models.TestDefinitionModel>()
+                      .Name("grid")
+                      .Columns(columns =>
+                      {
+                          columns.Command(command => command.Custom("Select").Click("selected")).Width(85);
+                          columns.Bound(c => c.Name);
+                          columns.Bound(c => c.Abbrev).Width(100);
+                          columns.Bound(c => c.Determines);
+                          columns.Bound(c => c.SampleType);
+                          columns.Bound(c => c.RequiredSampleSize).Width(200);
+
+                      })
+
+                      .ColumnMenu()
+
+                      .Pageable(pageable => pageable
+                                    .Refresh(true)
+                                    .PageSizes(true)
+                                    .ButtonCount(20))
+                      .HtmlAttributes(new { style = "height: 550px;" })
+                      .Navigatable()
+                      .Selectable(selectable =>
+                      {
+                          selectable.Mode(GridSelectionMode.Single);
+                          selectable.Type(GridSelectionType.Row);
+                      })
+                      .Sortable(sortable =>
+                      {
+                          sortable.SortMode(GridSortMode.SingleColumn);
+                      })
+                      .Filterable()
+                      .Scrollable()
+                      .DataSource(dataSource => dataSource
+                          .Ajax()
+                          .Model(model => model.Id(p => p.TestDefinitionID))
+                          .Read(read => read.Action("CML_TestDefinition_Read", "TestDefinition"))
+
+                      )
+                      .Events(ev => ev.Change("selected"))
+)
+@using (Html.BeginForm("Create", "Test", FormMethod.Post, new { id = "testsForm" }))
+{
+    @Html.HiddenFor(model => model.RequestID)
+    @Html.HiddenFor(model => model.SelectedTestID)
+}
+
+
+
+
+
+<script>
+
+    function selected(e) {
+        
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        document.getElementById('SelectedTestID').value = dataItem["TestDefinitionID"];
+        document.forms[0].submit();
+    }
+</script>
