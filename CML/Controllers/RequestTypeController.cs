@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using CML.Models;
+using CML.Authorize;
 
 namespace CML.Controllers
 {
@@ -16,9 +17,10 @@ namespace CML.Controllers
     {
         private CMLEntities db = new CMLEntities();
 
+        [CMLRoleAuthorize( Authorize.Roles.Admin, Authorize.Roles.Manager )]
         public ActionResult Index()
         {
-            return View("Index", "_AdminLayout");
+            return View("Index");
         }
 
         public static IEnumerable<RequestTypeModel> GetRequestTypes()
@@ -27,7 +29,9 @@ namespace CML.Controllers
             var req = dbs.CML_RequestType.Select(r => new RequestTypeModel
             {
                 ID = r.ID,
+                Category = r.Category,
                 RequestType = r.RequestType
+                
             });
 
             return req;
@@ -45,6 +49,7 @@ namespace CML.Controllers
             {
                 var entity = new CML_RequestType
                 {
+                    Category = cML_RequestType.Category,
                     RequestType = cML_RequestType.RequestType,
                 };
 
@@ -64,6 +69,7 @@ namespace CML.Controllers
                 var entity = new CML_RequestType
                 {
                     ID = cML_RequestType.ID,
+                    Category = cML_RequestType.Category,
                     RequestType = cML_RequestType.RequestType,
                 };
 
@@ -83,6 +89,7 @@ namespace CML.Controllers
                 var entity = new CML_RequestType
                 {
                     ID = cML_RequestType.ID,
+                    Category = cML_RequestType.Category,
                     RequestType = cML_RequestType.RequestType,
                 };
 

@@ -1,0 +1,111 @@
+﻿@model CML.Models.TestModel
+
+<div>
+    <table>
+        <tr>
+            <td>Test started</td>
+            <td>
+                <div class="col-md-10">
+                    @Html.EditorFor( model => model.TestStarted, new { htmlAttributes = new { @class = "form-control k-textbox", @readonly = "readonly" } } )
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Test finished</td>
+            <td> @Html.EditorFor( model => model.TestFinished, new { htmlAttributes = new { @class = "form-control k-textbox", @readonly = "readonly" } } )</td>
+        </tr>
+        <tr>
+            <td>Sample preparations</td>
+            <td>
+                <div class="col-md-10">
+                    @(Html.Kendo().NumericTextBoxFor( c => c.SamplePreparations )
+                                                                       .Name( "SamplePreparations" )
+                                                                       .Min( 0 )
+                                                                       //.Max( 0.9 )
+                                                                       .Step( 0.1 )
+                                                                       .HtmlAttributes( new { style = "width: 40%", } )
+                    )
+
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Sample analysis</td>
+            <td>
+                <div class="col-md-10">
+                    @(Html.Kendo().NumericTextBoxFor( c => c.SampleAnalysis )
+                                                                       .Name( "SampleAnalysis" )
+                                                                       .Min( 0 )
+                                                                       //.Max( 0.9 )
+                                                                       .Step( 0.1 )
+                                                                       .HtmlAttributes( new { style = "width: 40%", } )
+                    )
+
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Data analysis</td>
+            <td>
+                <div class="col-md-10">
+                    @(Html.Kendo().NumericTextBoxFor( c => c.DataAnalysis )
+                                                                       .Name( "DataAnalysis" )
+                                                                       .Min( 0 )
+                                                                       //.Max( 0.9 )
+                                                                       .Step( 0.1 )
+                                                                       .HtmlAttributes( new { style = "width: 40%", } )
+                    )
+
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Reports</td>
+            <td>
+                <div class="col-md-10">
+                    @(Html.Kendo().NumericTextBoxFor( c => c.Reports )
+                                                                       .Name( "Reports" )
+                                                                       .Min( 0 )
+                                                                       //.Max( 0.9 )
+                                                                       .Step( 0.1 )
+                                                                       .HtmlAttributes( new { style = "width: 40%", } )
+                    )
+
+
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Cleaning</td>
+            <td>
+                <div class="col-md-10">
+                    @(Html.Kendo().NumericTextBoxFor( c => c.Cleaning )
+                                                                       .Name( "Cleaning" )
+                                                                       .Min( 0 )
+                                                                       //.Max( 0.9 )
+                                                                       .Step( 0.1 )
+                                                                       .HtmlAttributes( new { style = "width: 40%", } )
+                    )
+
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>
+                <div class="col-md-10">
+
+                    @Html.EditorFor( model => model.Total, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly", @style="width:40%;" } } )
+
+                </div>
+            </td>
+        </tr>
+
+    </table>
+</div>

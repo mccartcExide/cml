@@ -1,0 +1,35 @@
+﻿
+@(Html.Kendo().Grid<CML.Models.CML_BusinessUnit>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.BusinessUnit);
+          columns.ForeignKey( l => l.ApproverID, ( System.Collections.IEnumerable )ViewData["approvers"], "ID", "DisplayName" );
+          columns.Command(command => { command.Edit(); }).Width(180);
+      })
+      .ToolBar(toolbar => {
+          toolbar.Create();
+          toolbar.Excel();
+      })
+      .ColumnMenu()
+      .Editable(editable => editable.Mode(GridEditMode.InLine))
+      .Pageable()
+      .Navigatable()
+      .Selectable(selectable => {
+          selectable.Mode(GridSelectionMode.Single);
+          selectable.Type(GridSelectionType.Row);
+      })
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      .Scrollable()
+      .HtmlAttributes( new { style = "height: 450px;" } )
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p => p.ID))
+          .Read(read => read.Action("CML_BusinessUnit_Read", "BU"))
+          .Create(create => create.Action("CML_BusinessUnit_Create", "BU"))
+          .Update(update => update.Action("CML_BusinessUnit_Update", "BU"))
+      )
+)

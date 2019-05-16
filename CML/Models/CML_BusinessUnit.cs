@@ -22,7 +22,9 @@ namespace CML.Models
     
         public int ID { get; set; }
         public string BusinessUnit { get; set; }
+        public int ApproverID { get; set; }
     
+        public virtual CML_User CML_User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
     }

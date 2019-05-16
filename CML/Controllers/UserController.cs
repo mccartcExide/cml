@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using CML.Models;
+using CML.Authorize;
 
 namespace CML.Controllers
 {
@@ -16,11 +17,12 @@ namespace CML.Controllers
     {
         private CMLEntities db = new CMLEntities();
 
-        private void BuildForeignList()
-        {
-            CMLEntities db = new CMLEntities();
-            ViewData["roletypes"] = new SelectList(db.CML_RoleType.ToList(), "ID", "RoleType");
-        }
+        //private void BuildForeignList()
+        //{
+        //    CMLEntities db = new CMLEntities();
+        //    ViewData["roletypes"] = new SelectList(db.CML_RoleType.ToList(), "ID", "RoleType");
+        //}
+        [CMLRoleAuthorize( Authorize.Roles.Admin, Authorize.Roles.Manager, Authorize.Roles.User )]
         public ActionResult Index()
         {
             IList<CML_RoleType> roles = db.CML_RoleType.ToList();
@@ -35,7 +37,8 @@ namespace CML.Controllers
                 ID = cML_User.ID,
                 UserID = cML_User.UserID,
                 Email = cML_User.Email,
-                DisplayName = cML_User.DisplayName
+                DisplayName = cML_User.DisplayName,
+                
             });
             //BuildForeignList();
             return Json(result);
@@ -51,7 +54,7 @@ namespace CML.Controllers
                     UserID = cML_User.UserID,
                     Email = cML_User.Email,
                     DisplayName = cML_User.DisplayName,
-                    RoleTypeID = cML_User.RoleTypeID
+                   
                 };
 
                 db.CML_User.Add(entity);
@@ -73,7 +76,7 @@ namespace CML.Controllers
                     UserID = cML_User.UserID,
                     Email = cML_User.Email,
                     DisplayName = cML_User.DisplayName,
-                    RoleTypeID = cML_User.RoleTypeID
+                   
                 };
 
                 db.CML_User.Attach(entity);
@@ -95,7 +98,7 @@ namespace CML.Controllers
                     UserID = cML_User.UserID,
                     Email = cML_User.Email,
                     DisplayName = cML_User.DisplayName,
-                    RoleTypeID = cML_User.RoleTypeID
+                  
                 };
 
                 db.CML_User.Attach(entity);

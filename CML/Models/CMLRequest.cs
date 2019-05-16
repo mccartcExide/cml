@@ -6,19 +6,26 @@ using System.Web;
 
 namespace CML.Models
 {
+    public class PieChartStatus
+    {
+        public int ID { get; set; }
+        public string Status { get; set; }
+        public int count { get; set; }
+    }
+    
     public class CMLRequest
     {
         [ScaffoldColumn(false)]
         public int RequestID { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
+        
         [Display(Name="CML Number")]
         public string CMLNumber { get; set; }
         [Display(Name = "Location")]
         [Range(1, int.MaxValue, ErrorMessage ="Please select a Location")]
         public int LocationID { get; set; }
-
+        [Required]
         [Display(Name = "Requested by")]
         public int? RequestedBy { get; set; }
         [Required]
@@ -33,7 +40,10 @@ namespace CML.Models
         [Required]
         [Display(Name = "EWR#")]
         public string EWRNumber { get; set; }
-        
+        [Display(Name ="Watch List")]
+        public string[] WatchList { get; set; }
+        [Display(Name ="Closure Notes")]
+        public string ClosureNotes { get; set; }
         public Nullable<bool> DirectorApprovalRequired { get; set; }
         [Display(Name = "Status")]
         public int StatusID { get; set; }
@@ -71,7 +81,10 @@ namespace CML.Models
         public int? AssignedTo { get; set; }
         [Display(Name ="Total Number of Samples")]
         public Nullable<int> TotalSamples { get; set; }
+        public int RequestStatus { get; set; }
         public string Note { get; set; }
+        public bool IsManager { get; set; }
+        public bool AssigneeeChanged { get; set; }
         public virtual ICollection<Note> RequestNotes { get; set; }
         public virtual AttachmentsModel Attachments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -123,6 +136,11 @@ namespace CML.Models
             this.TestsStarted = req.TestsStarted;
             this.UpdatedBy = req.UpdatedBy;
             this.UpdateOn = req.UpdateOn;
+            this.TotalSamples = req.TotalSamples;
+            if(!string.IsNullOrEmpty(req.WatchList))
+                this.WatchList = req.WatchList.Split( ',' );
+
+            this.ClosureNotes = req.ClosureNotes;
             this.CML_Status = new CML_Status
             {   
                 ID = req.CML_Status.ID,

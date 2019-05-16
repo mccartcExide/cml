@@ -1,0 +1,247 @@
+﻿@model CML.Models.ApprovalModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ActionApprovalView</title>
+</head>
+<body>
+    @using ( Html.BeginForm( "ApproveRequest", "Approval", FormMethod.Post, new { id = "approveForm" } ) )
+    {
+        <div class="Request-Nav Top">
+            <span>
+                <input type="button" class="k-button k-primary " style=" margin:5px;" value="Back to List"
+                       onclick="location.href='@Url.Action("Index", "Request")'" />
+            </span>
+
+
+        </div>
+        <div class="form-horizontal">
+            <table class="table req-new">
+                <tr>
+                    <td class="ApprovLabel">Request Name:</td>
+                    <td> @Html.ValueFor( c => c.Request.Name )</td>
+                </tr>
+                <tr>
+                    <td class="ApprovLabel">CML Number:</td>
+                    <td> @Html.ValueFor( c => c.Request.CMLNumber )</td>
+                </tr>
+                @if(Model.ActionTaken != null )
+                {
+                    <tr>
+                        <td class="ApprovLabel">Outcome:</td>
+                        <td>@Html.ValueFor(c=> c.ActionTaken) </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td colspan="2">
+                        <div class="form-group ">
+                            Approval Comments
+                            <div class="col-md-10">
+                                @Html.TextAreaFor( model => model.Comments, new { style = "width:100%;", @rows = "5", @cols = "100" } )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                @if ( Model.ActionTaken == null ) {
+                <tr>
+                    <td colspan="2" align="center" >
+                        <input type="button" id="btnApprove" class="k-button k-primary ApprovBtns ApprovYes"  value="Approve"
+                               />
+                        <input type="button" id="btnReject" class="k-button k-primary ApprovBtns ApprovNo"  value="Reject"
+                                />
+
+
+                    </td>
+                </tr>
+                }
+            </table>
+            <hr/>
+            <table class="table ApprovTbl">
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            Location
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.CML_Location.Location )
+                                
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ">
+                            Priority
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.CML_Priority.Priority )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            Requested By
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.RequestedBy )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ">
+                            Request Type
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.CML_RequestType.RequestType )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            Business Unit
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.CML_BusinessUnit.BusinessUnit )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ">
+                            Disposition
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.CML_Disposition.Disposition )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            Project#
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.ProjectNumber )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ">
+                           Phone
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.Phone )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            Deviation#
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.DeviationNumber )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ">
+                            Assigned To
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.AssignedTo )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            EWR#
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.EWRNumber )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ">
+                            Required By
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.RequestedBy )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            Total Number of Samples
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.TotalSamples )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-group ">
+                            Test Objectives
+                            <div class="col-md-10 ApprovNormal">
+                                @Html.ValueFor( model => model.Request.TestObjectives )
+
+                            </div>
+                        </div>
+                    </td>
+                   
+                </tr>
+            </table>
+
+
+        </div>
+        @Html.HiddenFor(c=> c.ActionTaken)
+        @Html.HiddenFor(c=> c.Approval)
+        @Html.HiddenFor(c=> c.AssignedTo)
+        @Html.HiddenFor(c=> c.Request)
+        @Html.HiddenFor(c=> c.RequestedBy)
+        @Html.HiddenFor(c=> c.ApprovalID)
+        @Html.HiddenFor(c=> c.ReqiestID)
+        
+    }
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#btnApprove').click(function (e) {
+            
+            $('#ActionTaken').val('Approved')
+            alert($('#ActionTaken').val())
+            $('#approveForm').submit();
+        })
+
+        $('#btnReject').click(function (e) {
+            var comment = $('#Comments').val();
+
+            if (comment == '') {
+                $('#Comments').css("border", "1px solid red");
+                alert('Please provide rejection comments');
+
+                return false;
+            } else {
+                $('#ActionTaken').val('Rejected')
+                $('#approveForm').submit();
+            }
+        })
+
+    });
+</script>

@@ -1,7 +1,116 @@
-﻿
-@{
-    ViewBag.Title = "Home";
-}
+﻿@model CML.Models.HomeModel
 
 
 
+<div style="text-align:center; width:100%">
+
+    <table>
+
+        <tr style="text-align:center; ">
+            <td colspan="3" style="text-align:center;font-size:large;">Requests Created/Requested</td>
+
+        </tr>
+        <tr style="text-align:center; ">
+            <td style="padding-left:50px">
+                <div class="container6" color="white" style="background-color:#b80422;">
+                    <p style="text-align:center;">
+                        Total Open<br />
+
+                        @Html.ValueFor( a => a.MyOpenCount )
+                    </p>
+                </div>
+
+            </td>
+
+            <td style="padding-left:50px">
+                <div class="container6" color="white" style="background-color:#b80422;">
+                    <p style="text-align:center;">
+                        Assigned<br />
+
+                        @Html.ValueFor( a => a.RequestAssigned )
+                    </p>
+                </div>
+
+            </td>
+            <td style="padding-left:50px">
+                <div class="container6" color="white" style="background-color:#b80422;">
+                    <p style="text-align:center;">
+                        Awaiting Approval<br />
+
+                        @Html.ValueFor( a => a.RequestsForApproval )
+                    </p>
+                </div>
+
+            </td>
+        </tr>
+        <tr style="text-align:center;">
+            <td colspan="3" style="  padding-top:20px; text-align:center;font-size:large;">Tests Assigned To Me</td>
+        </tr>
+        <tr style="text-align:center; ">
+            <td style="padding-left:50px">
+                <div class="container6" color="white" style="background-color:#23750e;">
+                    <p style="text-align:center;">
+                        Not Started<br />
+
+                        @Html.ValueFor( a => a.TestsNotStarted )
+                    </p>
+                </div>
+
+            </td>
+
+            <td style="padding-left:50px">
+                <div class="container6" color="white" style="background-color:#23750e;">
+                    <p style="text-align:center;">
+                        Started<br />
+
+                        @Html.ValueFor( a => a.TestsStarted )
+                    </p>
+                </div>
+
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr style="text-align:center; ">
+            <td colspan="3" style="text-align:center;padding-top:20px;font-size:large;">Approval Assigned To Me</td>
+
+        </tr>
+        <tr>
+            <td style="padding-left:50px">
+                <div class="container6" color="white" style="background-color:#0909ad">
+                    <p style="text-align:center;">
+                        For Approval<br />
+
+                        @Html.ValueFor( a => a.AwaitingApproval )
+                    </p>
+                </div>
+
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+</div>
+<style>
+    div.container6 {
+        height: 10em;
+        width: 10em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /*margin: 0 30px 0 0;*/
+        padding-left: 30px;
+        padding-right: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+        
+    }
+
+        div.container6 p {
+            margin: 0;
+            font-size: large;
+            color: white;
+            line-height:20px;
+        }
+</style>

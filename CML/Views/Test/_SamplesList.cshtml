@@ -1,9 +1,9 @@
 ﻿@(Html.Kendo().Grid<CML.Models.SampleModel>()
-    .Name("SampleGrid")
-    .Columns(columns => {
-        columns.Bound( c => c.ID ).Width( 80 ).ClientTemplate( Html.ActionLink( "#=ID#", "GetSample", "Sample", new { id = "#=ID#", test = "#=TestID#" }, new { @class = "k-button k-primary" } ).ToHtmlString() );
-        columns.Bound( c => c.SampleName );
-        columns.Bound( c => c.TotalSamples );
+    .Name( "SampleGrid" )
+    .Columns( columns => {
+        columns.Bound( c => c.ID ).Width( 80 ).ClientTemplate( Html.ActionLink( "#=ID#", "GetSample", "Samples", new { id = "#=ID#" }, new { @class = "k-button k-primary" } ).ToHtmlString() );
+        columns.ForeignKey( c => c.SampleTypeID, ( System.Collections.IEnumerable )ViewData["sampletypes"], "ID","SampleType" );
+        columns.Bound( c => c.TotalSamplesNbr );
 
     }
     )

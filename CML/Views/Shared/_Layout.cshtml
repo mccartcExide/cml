@@ -25,49 +25,53 @@
         <!--open container-->
         <div class="row row-offcanvas row-offcanvas-left">
             <!--open row-->
-            <div id="nav-section" class="col-xs-12 column">
+            @*<div id="nav-section" class="col-xs-12 column" style="height:100%;">*@
+            <div id="nav-section" class="col-xs-12 column" >
                 <!--open nav column-->
                 <div class="navbar-default">
                     @*<button id="toggle-button" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>*@
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>*@
                 </div>
                 <h1 id="dash-logo" class="center-block">CML Requests Management</h1>
                 <div class="collapse navbar-collapse" id="sidebar-nav" role="navigation">
                     <ul class="nav">
-                        <li id="CMLRequests"><a href="@(Url.Action("Index","Request"))"><span class="icon icon-chart-column"></span>CML Requests</a></li>
-                       @* <li id="CMLRequests"><a href="@(Url.Action("CmlIndex","Cml"))"><span class="icon icon-chart-column"></span>CML Requests</a></li>*@
-                        <li id="Tests"><a href="@(Url.Action("Index", "Test"))"><span class="icon icon-star-empty"></span>Tests</a></li>
-                        <li id="Dashboard"><a href="#"><span class="icon icon-faves"></span>Dashboard</a></li>
-                        <li id="Admin"><a href="@(Url.Action("Index","Admin"))"><span class="icon icon-info"></span>Admin</a></li>
+                        <li id="CMLRequests"><a href="@(Url.Action("Index","Home"))"><span class="glyphicon-home"></span>Home</a></li>
+                        <li id="CMLRequests"><a href="@(Url.Action("Index","Request"))"><span class="glyphicon-home"></span>CML Requests</a></li>
+                        @* <li id="CMLRequests"><a href="@(Url.Action("CmlIndex","Cml"))"><span class="icon icon-chart-column"></span>CML Requests</a></li>*@
+                        <li id="Tests"><a href="@(Url.Action("Index", "Test"))"><span class="glyphicon-home"></span>Tests</a></li>
+                        <li id="Approvals"><a href="@(Url.Action("Index", "Approval"))"><span class="glyphicon-home"></span>Approvals</a></li>
+                        <li id="Dashboard"><a href="@(Url.Action("Index","Dash"))"><span class="glyphicon-home"></span>Dashboard</a></li>
+                        <li id="Admin"><a href="@(Url.Action("Index","Admin"))"><span class="glyphicon-home"></span>Admin</a></li>
                     </ul>
-                   
+
                 </div>
             </div><!--close left column-->
             <div id="main-section" class="col-xs-12 column">
                 <div class="Dash-Bar">
-                    <span class="border border-primary">1</span>
-                    <span class="border border-secondary">2</span>
-                    <span class="border border-success">3</span>
-                    <span class="border border-danger">4</span>
-                    <span class="border border-warning">5</span>
-                    <span class="border border-info">6</span>
-                    <span class="border border-light">7</span>
-                    <span class="border border-dark">8</span>
-                    <span class="border border-white">9</span>
+                    @* <span class="border border-primary">1</span>
+                <span class="border border-secondary">2</span>
+                <span class="border border-success">3</span>
+                <span class="border border-danger">4</span>
+                <span class="border border-warning">5</span>
+                <span class="border border-info">6</span>
+                <span class="border border-light">7</span>
+                <span class="border border-dark">8</span>
+                <span class="border border-white">9</span>*@
 
 
                 </div>
-                @if (TempData["UserMessage"] != null)
+                @if ( TempData["UserMessage"] != null )
                 {
-                    var message = (MessageVM)TempData["UserMessage"];
+                    var message = ( MessageVM )TempData["UserMessage"];
                     <div id="msg" class="alert @message.CssClassName">
                         <strong>@message.Title</strong>
                         @message.Message
                     </div>
                 }
+
                 <!--open main column-->
                 @RenderBody()
             </div><!--close main column-->

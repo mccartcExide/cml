@@ -1,38 +1,27 @@
 ﻿<div class="btn btn-primary" style=" width:140px;">
 
-    @(Html.Kendo().Button()
-                        .Name("primaryTextButton")
-                        .HtmlAttributes(new { type = "button", @class = "k-primary", style = "padding-bottom:10px;" })
-                        .Content("Create New Request")
-                        .Events(ev => ev.Click("CreateNew")))
-
+  
+    
+    <input type="button" class="k-button k-primary" style="margin:5px;" value="Create New Request" 
+           onclick="location.href='@Url.Action("Requests_Create","Request")' "/>
     
 
-    @*<a href="@(Url.Action("CreateNew","Request"))">Create New Request</a>*@
+  
 </div>
 
 
-@*@(Html.Kendo().Button()
-    .Name("btnCreate")
-    .HtmlAttributes( new { type = "button",@class = "k-primary"})
-    .Content("Create New Request")
-    .Events(ev => ev.Click("onClick"))
-    )*@
 
 @(Html.Kendo().Grid<CML.Models.CMLRequest>()
       .Name("grid")
       .Columns(columns =>
       {
-          columns.Command(command => command.Custom("View").Click("showDetails"));
-          columns.Bound(c => c.CMLNumber);
-          columns.Bound(c => c.Name);
+          columns.Bound( c => c.CMLNumber ).Width( 80 ).ClientTemplate( Html.ActionLink( "#=CMLNumber#", "Edit", "Request", new { id = "#=RequestID#" }, new { @class = "k-button k-primary" } ).ToHtmlString() ).Width(90);
+      
+          columns.Bound(c => c.Name).Width(300);
           columns.ForeignKey(l => l.StatusID, (System.Collections.IEnumerable)ViewData["statuses"], "ID", "Status")
             .Title("Status").Width(200);
           columns.ForeignKey(l => l.LocationID , (System.Collections.IEnumerable)ViewData["locations"], "LocationID", "Location")
             .Title("Location").Width(200);
-         // columns.Bound(c => c.AssignedTo);
-          columns.ForeignKey(c => c.AssignedTo, (System.Collections.IEnumerable)ViewData["assignee"], "ID", "DisplayName")
-          .Title("Assigned To").Width(200);
           columns.ForeignKey(l => l.RequestTypeID, (System.Collections.IEnumerable)ViewData["request_types"], "ID", "RequestType")
             .Title("Request Type").Width(200);
           columns.Bound(c => c.CreatedOn).Format("{0:MM/dd/yyyy}");
@@ -45,6 +34,7 @@
       })
       .Editable(editable => editable.Mode(GridEditMode.PopUp))
       .ColumnMenu()
+      .Groupable()
       .Pageable()
       .Navigatable()
       .Selectable(selectable => {
@@ -59,6 +49,7 @@
           .Ajax()
           .Model(model => model.Id(p=> p.RequestID))
           .Read(read => read.Action("Requests_Read", "Request"))
+          .Group(g=> g.Add(model => model.StatusID))
 
 
       )

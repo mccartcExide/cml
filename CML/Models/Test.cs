@@ -17,8 +17,9 @@ namespace CML.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Test()
         {
-            this.Samples = new HashSet<Sample>();
             this.CML_Attachments = new HashSet<CML_Attachments>();
+            this.Samples = new HashSet<Sample>();
+            this.Notifications = new HashSet<Notification>();
         }
     
         public int TestID { get; set; }
@@ -34,25 +35,28 @@ namespace CML.Models
         public Nullable<int> StatusID { get; set; }
         public Nullable<System.DateTime> TestStarted { get; set; }
         public Nullable<System.DateTime> TestFinished { get; set; }
-        public string SamplePreparations { get; set; }
-        public string SampleAnalysis { get; set; }
-        public string DataAnalysis { get; set; }
-        public string Reports { get; set; }
-        public string Cleaning { get; set; }
-        public string Total { get; set; }
+        public Nullable<double> SamplePreparations { get; set; }
+        public Nullable<double> SampleAnalysis { get; set; }
+        public Nullable<double> DataAnalysis { get; set; }
+        public Nullable<double> Reports { get; set; }
+        public Nullable<double> Cleaning { get; set; }
+        public Nullable<double> Total { get; set; }
         public string Name { get; set; }
         public string Abbrev { get; set; }
         public string Determines { get; set; }
         public string SampleType { get; set; }
         public string SampleSize { get; set; }
+        public string ClosureNotes { get; set; }
     
         public virtual CML_TestDefinition CML_TestDefinition { get; set; }
         public virtual Request Request { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sample> Samples { get; set; }
         public virtual CML_User CML_User { get; set; }
         public virtual CML_Status CML_Status { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CML_Attachments> CML_Attachments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Sample> Samples { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

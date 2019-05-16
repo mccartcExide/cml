@@ -1,0 +1,500 @@
+﻿@model CML.Models.SampleModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Update</title>
+</head>
+<body>
+
+    @using ( Html.BeginForm( "Update_Sample", "Samples", FormMethod.Post, new { id = "sampleForm" } ) )
+    {
+
+        <div class="Request-Nav Top">
+            <span>
+                <input type="button" id="btnTest" class="k-button k-primary " style=" margin:5px;" value="Back"
+                       onclick="location.href='@Url.Action("GetTestView", "Test",new { id = Model.TestID } )'" />
+            </span>
+            <span class="float-right">
+                <input type="button" id="btnSub" value="Submit" style=" margin:5px;" class="k-button k-primary" />
+                @*<input type="button" id="btnSave" value="Save & Stay" style=" margin:5px;" class="k-button k-primary" />*@
+
+            </span>
+        </div>
+
+        <div class="form-horizontal">
+            <table class="table req-new">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.ID, htmlAttributes: new { @class = " control-label col-md-2" } )
+                            <div class="col-md-10">
+
+                                @Html.EditorFor( model => model.ID, new { htmlAttributes = new { @class = "k-textbox form-control readonly", @readonly = "readonly" } } )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.SampleTypeID, htmlAttributes: new { @class = "control-label col-md-2" } )
+                            <div class="col-md-10">
+                                @(Html.Kendo().DropDownListFor( model => model.SampleTypeID )
+                                                                                                                                         .Name( "SampleTypeID" )
+                                                                                                                                         .OptionLabel( "Please select" )
+                                                                                                                                         .DataTextField( "Text" )
+                                                                                                                                         .DataValueField( "Value" )
+                                                                                                                                         .BindTo( ViewData["sampletypes"] as SelectList )
+                                                                                                                                         .Events( ev => { ev.Change( "typesChanged" ); } )
+
+                                )
+                                @* @(Html.EditorFor(model => model.AssignedTo));*@
+                                @Html.ValidationMessageFor( model => model.SampleTypeID, "", new { @class = "text-danger" } )
+                            </div>
+                        </div>
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.TotalSamplesNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                            <div class="col-md-10">
+
+                                @Html.EditorFor( model => model.TotalSamplesNbr, new { htmlAttributes = new { @class = "k-textbox form-control readonly", @readonly = "readonly" } } )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.TestID, htmlAttributes: new { @class = " control-label col-md-2" } )
+                            <div class="col-md-10">
+
+                                @Html.EditorFor( model => model.TestID, new { htmlAttributes = new { @class = "k-textbox form-control readonly", @readonly = "readonly" } } )
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+            </table>
+            <div id="dvStandard">
+                <table class="table req-new">
+                    <tr>
+                        <td>
+                            <div class="form-group" id="dvOxide">
+                                @Html.LabelFor( model => model.OxideType, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                <div class="col-md-10">
+                                    @(Html.Kendo().DropDownListFor( model => model.OxideType )
+                                                                        .Name( "OxideType" )
+                                                                        .OptionLabel( "Please select" )
+                                                                        .DataTextField( "Text" )
+                                                                        .DataValueField( "Value" )
+                                                                        .BindTo( new List<SelectListItem>() {
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Leady",
+                                                                                                                      Value = "Leady"
+                                                                                                                  },
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Red",
+                                                                                                                      Value = "Red"
+                                                                                                                  }
+                                                                              } )
+
+
+                                    )
+                                    @* @(Html.EditorFor(model => model.AssignedTo));*@
+
+                                </div>
+                            </div>
+                            <div class="form-group" id="dvSeparator">
+                                @Html.LabelFor( model => model.SeperatorType, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                <div class="col-md-10">
+                                    @(Html.Kendo().DropDownListFor( model => model.SeperatorType )
+                                                                        .Name( "SeparatorType" )
+                                                                        .OptionLabel( "Please select" )
+                                                                        .DataTextField( "Text" )
+                                                                        .DataValueField( "Value" )
+                                                                        .BindTo( new List<SelectListItem>() {
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Glass",
+                                                                                                                      Value = "Glass"
+                                                                                                                  },
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Poly",
+                                                                                                                      Value = "Poly"
+                                                                                                                  }
+                                                                              } )
+
+
+                                    )
+                                    @* @(Html.EditorFor(model => model.AssignedTo));*@
+
+                                </div>
+                            </div>
+
+
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.Nbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.Nbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.SampleIDs, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.SampleIDs, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.SampleDesc, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.TextAreaFor( model => model.SampleDesc, new { @rows = "5", @cols = "50" } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="dvPlates">
+                <table class="table req-new">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.PosStandardNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.PosStandardNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.PosStandardIDs, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.PosStandardIDs, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.PosTMBNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.PosTMBNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.PosTMBIds, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.PosTMBIds, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.PosOtherNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.PosOtherNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.PosOtherID, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.PosOtherID, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.PosComment, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.TextAreaFor( model => model.PosComment, new { @rows = "5", @cols = "50" } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <!-- NEGATIVE-->
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.NegStandardNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.NegStandardNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.NegStandardIDs, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.NegStandardIDs, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.NegTMBNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.NegTMBNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.NegTMBIds, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.NegTMBIds, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.NegOtherNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.NegOtherNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.NegOtherID, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.EditorFor( model => model.NegOtherID, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.NegComment, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
+
+                                    @Html.TextAreaFor( model => model.NegComment, new { @rows = "5", @cols = "50" } )
+
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    }
+    @Html.HiddenFor( c => Model.IsNewSample );
+    @Html.HiddenFor( c => Model.SaveAndStay );
+    <script>
+        //$(function () {
+
+        //    var validator = $("#sampleForm").kendoValidator().data("kendoValidator");
+        //    alert('Its here');
+        //    $("sampleForm").submit(function (event) {
+        //        alert('being validated');
+        //        event.preventDefault();
+        //        if (validator.validate()) {
+        //            //status2.text("Hooray! Your tickets has been booked!")
+        //            //    .removeClass("invalid")
+        //            //    .addClass("valid");
+        //            alert('Its good');
+        //        } else {
+        //            alert('Its bad');
+        //            //status.text("Oops! There is invalid data in the form.")
+        //            //    .removeClass("valid")
+        //            //    .addClass("invalid");
+        //        }
+        //    });
+        //});
+        $(document).ready(function () {
+            $('#dvStandard').hide();
+            $('#dvPlates').hide();
+            var ddl = $('#SampleTypeID').data("kendoDropDownList");
+            setViews(ddl.text());
+
+            $('#PosTMBNbr').change(function (e) {
+               
+                var v = $('#PosTMBNbr').val();
+                $('#PosTMBNbr').val(v * 3);
+                setTotalNbr();
+               
+            });
+            $('#NegTMBNbr').change(function (e) {
+
+                var v = $('#NegTMBNbr').val();
+                $('#NegTMBNbr').val(v * 3);
+                setTotalNbr();
+
+            });
+            $('#Nbr').change(function (e) {
+
+                var ddl = $('#SampleTypeID').data("kendoDropDownList");
+                var type = ddl.text();
+                var abbrev = $('#TestAbbrev').val();
+
+                if (type == 'Separator' && abbrev == 'SEP-Comp/S') {
+                    var v = $('#Nbr').val();
+                    $('#Nbr').val(v * 3);
+                }
+                setTotalNbr();
+            })
+            $('#PosStandardNbr').change(function (e) {
+                setTotalNbr();
+            });
+            $('#PosOtherNbr').change(function (e) {
+                setTotalNbr();
+            });
+            $('#NegStandardNbr').change(function (e) {
+                setTotalNbr();
+            });
+            $('#NegOtherNbr').change(function (e) {
+                setTotalNbr();
+            });
+
+            //$('#sampleForm').on("submit", function () {
+            //    alert('ooo er mable')
+            //})
+
+            $('#btnSub').click(function (e) {
+              
+               // $('#SaveAndStay').va(false);
+                $('#sampleForm').submit();
+            })
+          
+
+            var isNew = $('#IsNewSample').val();
+            if (isNew == 'True') {
+                $('#ID').hide();
+            }
+
+        })
+
+        function typesChanged(e) {
+            var ddl = $('#SampleTypeID').data("kendoDropDownList");
+
+            var newValue = ddl.text();
+            $('[id$=Nbr]').val(0);
+            setViews(newValue);
+            setTotalNbr();
+
+
+        }
+
+        function setTotalNbr() {
+           
+            var total = 0;
+           
+            if ($('#dvStandard').is(":visible")){
+                total = + isNaN($('#Nbr').val()) ? 0 : $('#Nbr').val();
+
+            }else {
+                var v1 = isNaN($('#PosStandardNbr').val()) ? 0 : $('#PosStandardNbr').val()
+                var v2 = isNaN($('#PosTMBNbr').val()) ? 0 : $('#PosTMBNbr').val();
+                var v3 = isNaN($('#PosOtherNbr').val()) ? 0 : $('#PosOtherNbr').val();
+                var v4 = isNaN($('#NegStandardNbr').val()) ? 0 : $('#NegStandardNbr').val();
+                var v5 = isNaN($('#NegTMBNbr').val()) ? 0 : $('#NegTMBNbr').val();
+                var v6 = isNaN($('#NegOtherNbr').val()) ? 0 : $('#NegOtherNbr').val();
+               
+                total = (parseInt(v1) + parseInt(v2) + parseInt(v3) + parseInt(v4) + parseInt(v5) + parseInt(v6));
+            
+            }
+           
+
+            $('#TotalSamplesNbr').val(total);
+
+        }
+        function setViews(newValue) {
+            if (newValue == 'Formed Plate' || newValue == 'Unformed Plate' || newValue == 'Grids' || newValue == 'Straps'
+                || newValue == 'Posts' || newValue == 'Welds' || newValue == 'Lugs') {
+
+                $('#dvPlates').show();
+                $('#dvStandard').hide();
+
+
+            } else if (newValue == 'Oxide') {
+                $('#dvPlates').hide();
+                $('#dvStandard').show();
+                $('#dvOxide').show();
+                $('#dvSeparator').hide();
+
+            } else if (newValue == 'Separator') {
+                $('#dvPlates').hide();
+                $('#dvStandard').show();
+                $('#dvOxide').hide();
+                $('#dvSeparator').show();
+
+            } else {
+                $('#dvPlates').hide();
+                $('#dvStandard').show();
+                $('#dvOxide').hide();
+                $('#dvSeparator').hide();
+
+
+            }
+        }
+    </script>
+</body>
+</html>

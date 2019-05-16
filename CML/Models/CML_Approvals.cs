@@ -15,13 +15,14 @@ namespace CML.Models
     public partial class CML_Approvals
     {
         public int ID { get; set; }
-        public Nullable<int> UserID { get; set; }
+        public int UserID { get; set; }
         public string Outcome { get; set; }
-        public Nullable<System.DateTime> DateAssigned { get; set; }
+        public System.DateTime DateAssigned { get; set; }
         public Nullable<System.DateTime> DateActioned { get; set; }
         public string Comments { get; set; }
-        public Nullable<int> RequestID { get; set; }
+        public int RequestID { get; set; }
     
+        public virtual CML_User CML_User { get; set; }
         public virtual Request Request { get; set; }
     }
 }

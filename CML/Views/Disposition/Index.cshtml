@@ -1,4 +1,4 @@
-﻿<div class="content-wrapper">
+﻿
     @(Html.Kendo().Grid<CML.Models.DispositionModel>()
               .Name("grid")
               .Columns(columns =>
@@ -27,4 +27,3 @@
                   .Destroy(destroy => destroy.Action("CML_Disposition_Destroy", "Disposition"))
               )
     )
-</div>

@@ -3,26 +3,27 @@
       .Name("grid")
       .Columns(columns =>
       {
-        columns.Bound(c => c.RoleType);
-        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+          columns.Bound(c => c.RoleType);
+          columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
       })
       .ToolBar(toolbar => {
-            toolbar.Create();
-            toolbar.Excel();
+          toolbar.Create();
+          toolbar.Excel();
       })
       .ColumnMenu()
       .Editable(editable => editable.Mode(GridEditMode.InLine))
       .Pageable()
       .Navigatable()
       .Selectable(selectable => {
-            selectable.Mode(GridSelectionMode.Single);
-            selectable.Type(GridSelectionType.Row);
+          selectable.Mode(GridSelectionMode.Single);
+          selectable.Type(GridSelectionType.Row);
       })
       .Sortable(sortable => {
           sortable.SortMode(GridSortMode.SingleColumn);
       })
       .Filterable()
       .Scrollable()
+      .HtmlAttributes( new { style = "height: 450px;" } )
       .DataSource(dataSource => dataSource
           .Ajax()
           .Model(model => model.Id(p => p.ID))

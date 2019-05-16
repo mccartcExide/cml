@@ -8,17 +8,22 @@ namespace CML.Utilities
 {
     public static class RoleExtensions
     {
-        public static bool IsUserInRole(this CMLEntities db, string username)
+        public static bool IsUserInRole(this CMLEntities db, string username,string role)
         {
-            //var roles = db.CML_Roles.Where(r => r.UserID.ToUpper().Equals(username.ToUpper())).SingleOrDefault();
-            //if (roles != null)
-            //    return true;
-            //else
-            //    return false;
+            var roles = db.CML_Roles.Where(r => r.UserID.ToUpper().Equals(username.ToUpper() ) && r.Role.Equals( role ) ).SingleOrDefault();
+            if (roles != null)
+                return true;
+            else
+                return false;
 
-            return true;
+            
         }
 
+        public static String[] GetRoles(this CMLEntities db, string username )
+        {
+            List<string> roles = db.CML_Roles.Where( a => a.UserID.ToUpper().Equals( username.ToUpper() ) ).Select( a => a.Role ).ToList();
+            return roles.ToArray();
+        }
 
         public static string ExtractUsername(string user)
         {

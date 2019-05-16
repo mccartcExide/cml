@@ -19,18 +19,25 @@ namespace CML.Models
         {
             this.Requests = new HashSet<Request>();
             this.Tests = new HashSet<Test>();
+            this.CML_BusinessUnit = new HashSet<CML_BusinessUnit>();
+            this.CML_Approvals = new HashSet<CML_Approvals>();
+            this.Notifications = new HashSet<Notification>();
         }
     
         public int ID { get; set; }
         public string UserID { get; set; }
         public string Email { get; set; }
-        public int RoleTypeID { get; set; }
         public string DisplayName { get; set; }
     
-        public virtual CML_RoleType CML_RoleType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Request> Requests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CML_BusinessUnit> CML_BusinessUnit { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CML_Approvals> CML_Approvals { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

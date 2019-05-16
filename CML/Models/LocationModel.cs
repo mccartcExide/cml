@@ -13,6 +13,7 @@ namespace CML.Models
         public int LocationID { get; set; }
         [Required]
         public string Location { get; set; }
+        public string Code { get; set; }
     }
 
 

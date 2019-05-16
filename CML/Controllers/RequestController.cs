@@ -10,13 +10,17 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using CML.Models;
 using System.IO;
+using CML.Utilities;
+using System.Web.Security;
+using System.Security.Principal;
+using CML.Authorize;
 
 namespace CML.Controllers
 {
     public class RequestController : Controller
     {
         private CMLEntities db = new CMLEntities();
-
+        [CMLRoleAuthorize( Authorize.Roles.User,Authorize.Roles.Manager, Authorize.Roles.Admin)]
         public ActionResult Index()
         {
             IList<CML_Location> locs = db.CML_Location.ToList();
@@ -25,31 +29,12 @@ namespace CML.Controllers
             ViewData["statuses"] = stats;
             IList < CML_RequestType > rts = db.CML_RequestType.ToList();
             ViewData["request_types"] = rts;
-            IList<CML_User> assig = db.CML_User.Where(a => a.CML_RoleType.RoleType.Equals("Assignee")).ToList();
+            IList<CML_User> assig = db.CML_User.ToList();
             ViewData["assignee"] = assig;
             return View();
         }
         
-        //public JsonResult GetLocations()
-        //{
-        //    return Json(db.CML_Location, JsonRequestBehavior.AllowGet);
-        //}
-        //public JsonResult GetPriorities()
-        //{
-        //    return Json(db.CML_Priority, JsonRequestBehavior.AllowGet);
-        //}
-        //public JsonResult GetBusinesUnits()
-        //{
-        //    return Json(db.CML_BusinessUnit, JsonRequestBehavior.AllowGet);
-        //}
-        //public JsonResult GetRequestTypes()
-        //{
-        //    return Json(db.CML_RequestType, JsonRequestBehavior.AllowGet);
-        //}
-        //public JsonResult GetDispositions()
-        //{
-        //    return Json(db.CML_Disposition, JsonRequestBehavior.AllowGet);
-        //}
+      
         public ActionResult Requests_Create()
         {
             //IList<CML_Location> locs = db.CML_Location.ToList();
@@ -83,6 +68,23 @@ namespace CML.Controllers
 
             return Json(GetTests(reqid).ToDataSourceResult(request), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Approvals_Read([DataSourceRequest]DataSourceRequest request, int reqid )
+        {
+            IQueryable<CML_Approvals> cml_app = db.CML_Approvals.Where( a => a.RequestID == reqid );
+            DataSourceResult result = cml_app.ToDataSourceResult( request, app => new
+            {
+                ID = app.ID,
+                Outcome = app.Outcome,
+                RequestID = app.RequestID,
+                UserID = app.UserID,
+                Comments = app.Comments,
+                DateAssigned = app.DateAssigned,
+                DateActioned = app.DateActioned
+            } );
+            return Json( result, JsonRequestBehavior.AllowGet );
+
+        }
         private void BuildSelectLists()
         {
             ViewData["locationsddl"] = new SelectList(db.CML_Location, "LocationID", "Location");
@@ -90,13 +92,17 @@ namespace CML.Controllers
             ViewData["businessunitddl"] = new SelectList(db.CML_BusinessUnit, "ID", "BusinessUnit");
             ViewData["dispositionddl"] = new SelectList(db.CML_Disposition, "ID", "Disposition");
             ViewData["priorityddl"] = new SelectList(db.CML_Priority, "ID", "Priority");
-            ViewData["assigneddl"] = new SelectList(db.CML_User.Where(a => a.CML_RoleType.RoleType.Equals("Assignee")), "ID", "DisplayName");
-            ViewData["requesterddl"] = new SelectList(db.CML_User.Where(a => a.CML_RoleType.RoleType.Equals("Requester")), "ID", "DisplayName");
+            ViewData["assigneddl"] = new SelectList(db.CML_User, "ID", "DisplayName");
+            ViewData["requesterddl"] = new SelectList(db.CML_User, "ID", "DisplayName");
 
             IList<CML_Status> stats = db.CML_Status.ToList();
-            IList<CML_User> assig = db.CML_User.Where(a => a.CML_RoleType.RoleType.Equals("Tester")).ToList();
+           //// IList<CML_User> assig = db.CML_User.ToList();
+            //IList<CML_User> approv = db.CML_User.ToList();
+            IList<CML_User> recipients = db.CML_User.ToList();
+          //  ViewData["approvers"] = approv;
             ViewData["statuses"] = stats;
-            ViewData["testers"] = assig;
+            //ViewData["testers"] = assig;
+            ViewData["recipients"] = recipients;
 
             //var t = db.CML_User.Where(l => l.CML_RoleType.RoleType.Equals("Approver")).ToList();
 
@@ -111,20 +117,23 @@ namespace CML.Controllers
         {
             if (ModelState.IsValid)
             {
+                var cml = BuildCMLNumber( cmlRequest.BusinessUnitID, cmlRequest.RequestTypeID, cmlRequest.LocationID );
+                cmlRequest.CMLNumber = cml;
+                cmlRequest.StatusID = 1;
                 var req = new Request
                 {
                     Name = cmlRequest.Name,
-                    CMLNumber = cmlRequest.CMLNumber,
+                    CMLNumber = cml,
                     RequestedBy = cmlRequest.RequestedBy,
                     ProjectNumber = cmlRequest.ProjectNumber,
                     DeviationNumber = cmlRequest.DeviationNumber,
                     EWRNumber = cmlRequest.EWRNumber,
-                    DirectorApprovalRequired = cmlRequest.DirectorApprovalRequired,
+                    DirectorApprovalRequired = false,
                     RetentionDate = cmlRequest.RetentionDate,
                     Phone = cmlRequest.Phone,
                     TestObjectives = cmlRequest.TestObjectives,
                     CreatedOn = DateTime.Now,
-                    CreatedBy = "mccartc",
+                    CreatedBy = WindowsIdentity.GetCurrent().Name,
                     DateRequired = cmlRequest.DateRequired,
                    
                     LocationID = cmlRequest.LocationID,
@@ -132,7 +141,9 @@ namespace CML.Controllers
                     DispositionID = cmlRequest.DispositionID,
                     PriorityID = cmlRequest.PriorityID,
                     RequestTypeID = cmlRequest.RequestTypeID,
-                    StatusID = 1
+                    StatusID = 1,
+                   
+                    
                     //UpdateOn = request.UpdateOn,
                     //UpdatedBy = request.UpdatedBy,
                     //TestsStarted = request.TestsStarted,
@@ -145,10 +156,29 @@ namespace CML.Controllers
                 BuildSelectLists();
             }
 
+            //send notification
+            var creator = db.GetUserFromUsername( User.Identity.Name );
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.CreatedRequest, cmlRequest.RequestID, null, creator.ID );
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.CreatedRequest, cmlRequest.RequestID, null, cmlRequest.RequestedBy.Value );
 
 
-            return View(cmlRequest);
+            cmlRequest.RequestNotes = db.Notes.Where( a => a.ParentID == cmlRequest.RequestID && a.NoteType.Equals( "R" ) ).OrderByDescending( a => a.CreatedOn ).ToList();
+            cmlRequest.Attachments = GetFiles( cmlRequest.RequestID );
+            
+            return View("Edit",cmlRequest);
             //return Json(new[] { cmlRequest }.ToDataSourceResult(request, ModelState));
+        }
+
+        private string BuildCMLNumber( int businessUnitID, int requestTypeID, int locationID )
+        {
+            string result = string.Empty;
+            var bu = db.CML_BusinessUnit.Where( a => a.ID == businessUnitID ).Select( a => a.BusinessUnit ).First();
+            result = bu.Substring( bu.IndexOf( '(' )+1, 2 );
+            result = result + db.NextNumber().Trim();
+            result = result + db.CML_RequestType.Find( requestTypeID ).Category.Trim();
+            result = result + DateTime.Now.Year.ToString().Substring( 2 ).Trim();
+            result = result + db.CML_Location.Find( locationID ).Code;
+            return result;
         }
 
         private AttachmentsModel GetFiles(int reqid )
@@ -216,29 +246,52 @@ namespace CML.Controllers
                 TestsStarted = r.TestsStarted,
                 TestsFinished = r.TestsFinished,
                 StatusID = r.StatusID,
-                AssignedTo = r.AssignedTo
+                AssignedTo = r.AssignedTo,
+                AssigneeeChanged = false
                 
             });
 
             return reqs;
         }
+        [CMLRoleAuthorize( Authorize.Roles.Admin, Authorize.Roles.Manager,Authorize.Roles.User )]
         public  ActionResult Edit(int? id )
         {
             if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest,"No ID was passed to the controller");
             }
-
+            var name = User.Identity.Name.ToString();
+          
             BuildSelectLists();
             CMLEntities db = new CMLEntities();
             var req = db.Requests.Find(id);//.Where(r1 => r1.RequestID == id).FirstOrDefault();
 
             CMLRequest r = new CMLRequest().Convert(req);
+
+
+            //TO DO check on manager
+            r.IsManager = System.Web.Security.Roles.IsUserInRole( Utilities.Utilities.Instance.StripDomain(name ), "Manager" );
+
             r.RequestNotes = db.Notes.Where( a => a.ParentID == id && a.NoteType.Equals( "R" ) ).OrderByDescending(a=>a.CreatedOn).ToList();
             r.Attachments = GetFiles( id.Value );
+            //if ( r.DirectorApprovalRequired.Value )
+            //{
+            //    TempData["ApprovalMessage"] = new MessageVM() { CssClassName = "alert alert-info", Title = "Notice!", Message = string.Format( "Director approval is required for this request!." ) };
+            //}
             return View(r);
             
         }
+
+        public ActionResult CheckApproval( int id, int priorityid )
+        {
+            CalculateSamples cs = new CalculateSamples();
+            Result result = cs.CheckForApproval( id, priorityid );
+
+            //  var result  { isApproval: "Yes"};
+            return Json( result, JsonRequestBehavior.AllowGet );
+        }
+
+
         [HttpPost]
         //public ActionResult SaveChanges([DataSourceRequest]DataSourceRequest request, CMLRequest req)
         public ActionResult SaveChanges( CMLRequest req)
@@ -252,12 +305,6 @@ namespace CML.Controllers
                 entity.AssignedTo = req.AssignedTo;
                 entity.BusinessUnitID = req.BusinessUnitID;
                 entity.CMLNumber = req.CMLNumber;
-                //CML_BusinessUnit = req.CML_BusinessUnit,
-                //CML_Disposition = req.CML_Disposition,
-                //CML_Location = req.CML_Location,
-                //CML_Priority = req.CML_Priority,
-                //CML_RequestType = req.CML_RequestType,
-                //CML_Status = req.CML_Status,
                 entity.CreatedBy = req.CreatedBy;
                 entity.CreatedOn = req.CreatedOn;
                 entity.DateRequired = req.DateRequired;
@@ -278,12 +325,23 @@ namespace CML.Controllers
                 entity.TestObjectives = req.TestObjectives;
                 entity.TestsFinished = req.TestsFinished;
                 entity.TestsStarted = req.TestsStarted;
-                entity.UpdatedBy = "mccartc'";
+                entity.UpdatedBy = Session["DisplayName"].ToString();
                 entity.UpdateOn = DateTime.Now;
-                
-                
-            
-                db.Requests.Attach(entity);
+
+                if ( req.WatchList != null )
+                {
+                    string watchList = string.Empty;
+                    foreach ( var wl in req.WatchList )
+                    {
+                        watchList = watchList + wl + ",";
+                    }
+                    if ( !string.IsNullOrEmpty( watchList ) )
+                    {
+                        watchList = watchList.Substring( 0, watchList.Length - 1 );
+                    }
+                    entity.WatchList = watchList;
+                }
+                    db.Requests.Attach(entity);
                 db.Entry(entity).State = EntityState.Modified;
                 
 
@@ -298,8 +356,16 @@ namespace CML.Controllers
                     db.Notes.Add( n );
                     
                 }
+              
                 db.SaveChanges();
                 req.Note = string.Empty;
+            }
+            //Notifications
+            if ( req.AssigneeeChanged )
+            {
+               // var user = db.CML_User.Find(  );
+                Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.RequestAssignment, req.RequestID,null, req.AssignedTo.Value );
+
             }
             req.RequestNotes = db.Notes.Where( a => a.ParentID == req.RequestID && a.NoteType.Equals( "R" ) ).OrderByDescending(a=> a.CreatedOn).ToList();
             req.Attachments = GetFiles( req.RequestID );
@@ -315,7 +381,20 @@ namespace CML.Controllers
 
             return Json(GetRequests().ToDataSourceResult(request));
         }
+        public JsonResult WatchList_Read(string text )
+        {
+            var peeps = db.CML_User.Select( p => new UserModel
+            {
+                ID = p.ID,
+                DisplayName = p.DisplayName
+            } );
 
+            if ( !string.IsNullOrEmpty( text ) )
+            {
+                peeps = peeps.Where( a => a.DisplayName.Contains( text ) );
+            }
+            return Json( peeps, JsonRequestBehavior.AllowGet );
+        }
         [HttpPost]
         public ActionResult Excel_Export_Save(string contentType, string base64, string fileName)
         {
@@ -340,6 +419,149 @@ namespace CML.Controllers
             TempData["UserMessage"] = new MessageVM() { CssClassName = "alert alert-success", Title = "Success!", Message = string.Format("Deletion of {0} has completed.", req.CMLNumber) };
             return RedirectToAction("Index");
         }
+        public ActionResult CompleteRequest(int id, string comment )
+        {
+            var req = db.Requests.Find( id );
+            req.StatusID = Structs.Statuses.Complete;
+            req.ClosureNotes = comment;
+
+
+            req.UpdatedBy = Session["DisplayName"].ToString();
+            req.UpdateOn = DateTime.Now;
+
+            db.Requests.Attach( req );
+            db.Entry( req ).State = EntityState.Modified;
+
+
+           db.SaveChanges();
+            TempData["UserMessage"] = new MessageVM() { CssClassName = "alert alert-info", Title = "Information", Message = string.Format( "The request {0} has been completed.", req.CMLNumber ) };
+
+
+            return JavaScript( "location.reload(true)" );
+
+            //return Content("done");
+        }
+        public ActionResult CancelRequest(int id )
+        {
+
+            var req = db.Requests.Find( id );
+            req.StatusID = Structs.Statuses.Cancelled;
+
+            //Cancel Workflow
+            var app = req.CML_Approvals.Where( a => a.Outcome == null || a.Outcome.Equals( string.Empty ) ).FirstOrDefault();
+            if ( app != null )
+            {
+                app.Outcome = Structs.Outcomes.Cancelled;
+                Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.ApprovalCancelled, req.RequestID, null, app.UserID );
+            }
+            var tests = req.Tests;
+            foreach ( var t in tests )
+            {
+                if ( t.StatusID != Structs.Statuses.Complete )
+                {
+                    t.StatusID = Structs.Statuses.Cancelled;
+                    if ( t.AssignedTo.HasValue )
+                        Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.TestCancelled, null, t.TestID, t.AssignedTo.Value );
+
+
+                }
+            }
+
+            //send cancellation messages
+            var labManager = db.GetLaboratoryManager().ID;
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.RequestCancelled, req.RequestID, null, req.RequestedBy.Value );
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.RequestCancelled, req.RequestID, null, labManager );
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.RequestCancelled, req.RequestID, null, db.GetUserFromUsername( req.CreatedBy ).ID );
+
+            var watchlist = req.WatchList;
+            if ( !string.IsNullOrEmpty( watchlist ) )
+            {
+                var list = watchlist.Split( ',' );
+                foreach ( var l in list )
+                {
+                    Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.RequestCancelled, id, null, Convert.ToInt32( l ) );
+
+                }
+
+            }
+
+
+
+
+
+            var note = new Note();
+            note.CreatedBy = Session["DisplayName"].ToString();
+            note.CreatedOn = DateTime.Now;
+            note.NoteText = "The request and any approvals have been cancelled";
+            note.NoteType = "R";
+            note.ParentID = id;
+
+            db.Notes.Add( note );
+
+            IList<CML_Location> locs = db.CML_Location.ToList();
+            ViewData["locations"] = locs;
+            IList<CML_Status> stats = db.CML_Status.ToList();
+            ViewData["statuses"] = stats;
+            IList<CML_RequestType> rts = db.CML_RequestType.ToList();
+            ViewData["request_types"] = rts;
+            IList<CML_User> assig = db.CML_User.ToList();
+            ViewData["assignee"] = assig;
+            TempData["UserMessage"] = new MessageVM() { CssClassName = "alert alert-danger", Title = "Warning!", Message = string.Format( "The request {0} and its approvals and Tests have been cancelled.", req.CMLNumber ) };
+            //return View( "Index" );
+            return JavaScript( "location.reload(true)" );
+        }
+        public ActionResult CancelApproval(int id )
+        {
+            var labManager = db.GetLaboratoryManager().ID;
+            var req = db.Requests.Find( id );
+            req.StatusID = Structs.Statuses.Open;
+
+            var note = new Note();
+            note.CreatedBy = Session["DisplayName"].ToString();
+            note.CreatedOn = DateTime.Now;
+            note.NoteText = "The workflow has been cancelled";
+            note.NoteType = "R";
+            note.ParentID = id;
+
+            db.Notes.Add( note );
+
+
+            //Cancel Workflow
+            var app = req.CML_Approvals.Where( a => a.Outcome == null || a.Outcome.Equals( string.Empty ) ).First();
+            app.Outcome = Structs.Outcomes.Cancelled;
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.ApprovalCancelled, req.RequestID, null, app.UserID );
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.ApprovalCancelled, req.RequestID, null, req.RequestedBy.Value );
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.ApprovalCancelled, req.RequestID, null, labManager );
+            //cancel tests
+
+
+
+
+
+
+            db.Requests.Attach( req );
+            db.Entry( req ).State = EntityState.Modified;
+
+
+            db.SaveChanges();
+
+
+            IList<CML_Location> locs = db.CML_Location.ToList();
+            ViewData["locations"] = locs;
+            IList<CML_Status> stats = db.CML_Status.ToList();
+            ViewData["statuses"] = stats;
+            IList<CML_RequestType> rts = db.CML_RequestType.ToList();
+            ViewData["request_types"] = rts;
+            IList<CML_User> assig = db.CML_User.ToList();
+            ViewData["assignee"] = assig;
+            TempData["UserMessage"] = new MessageVM() { CssClassName = "alert alert-warning", Title = "Warning!", Message = string.Format( "The request {0} has its request for approval cancelled.", req.CMLNumber ) };
+            //var msg = new MessageVM() { CssClassName = "alert alert-warning", Title = "Warning!", Message = string.Format( "The request {0} has its request for approval cancelled.", req.CMLNumber ) };
+            // return View( "Index" );
+            //return RedirectToAction( "Index", "Request" );
+            //return Json( msg, JsonRequestBehavior.AllowGet );
+           return  JavaScript( "location.reload(true)" );
+
+        }
         public ActionResult RequestApproval(int? id)
         {
             if (id == null)
@@ -351,6 +573,46 @@ namespace CML.Controllers
             {
                 return HttpNotFound();
             }
+
+            var labManager = db.GetLaboratoryManager().ID;
+
+            var approv = 0;
+            if ( req.DirectorApprovalRequired.Value )
+            {
+                //get director approval
+                approv = req.CML_BusinessUnit.ApproverID;
+                
+            }
+            else
+            { // Get lab manager approval
+              // approv = db.CML_User.Where( a => a.CML_RoleType.RoleType.Equals( "Laboratory Manager" ) ).Select(b=> b.ID).First();
+              //need to find better soluton for this
+                approv = labManager;
+            }
+            CML_Approvals rec = new CML_Approvals
+            {
+                UserID = approv,
+                DateAssigned = DateTime.Now,
+                RequestID = req.RequestID
+
+            };
+            db.CML_Approvals.Add( rec );
+            req.StatusID = 2;
+
+            db.Requests.Attach( req );
+            db.Entry( req ).State = EntityState.Modified;
+
+            db.SaveChanges();
+            Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.ApprovalRequired, req.RequestID, null, approv );
+
+            var sendNotice = db.Notifications.Where( a => a.RequestID == req.RequestID && a.MessageType.Equals( Structs.EmailNotices.ApprovalNotice ) ).Count();
+            if(sendNotice == 0 )
+            {
+                Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.ApprovalNotice, req.RequestID, null, req.RequestedBy.Value );
+                Utilities.Utilities.Instance.CreateEmailNotice( Structs.EmailNotices.ApprovalNotice, req.RequestID, null, labManager );
+
+            }
+
             TempData["UserMessage"] = new MessageVM() { CssClassName = "alert alert-info", Title = "Information!", Message = string.Format("The request {0} has been submitted for approval.", req.CMLNumber) };
 
             return RedirectToAction("Index");

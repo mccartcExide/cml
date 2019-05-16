@@ -9,13 +9,14 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using CML.Models;
+using CML.Authorize;
 
 namespace CML.Controllers
 {
     public class RoleTypeController : Controller
     {
         private CMLEntities db = new CMLEntities();
-       
+        [CMLRoleAuthorize( Authorize.Roles.Admin, Authorize.Roles.Manager )]
         public ActionResult Index()
         {
             

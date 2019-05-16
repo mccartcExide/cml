@@ -20,7 +20,8 @@
                     .Refresh(true)
                     .PageSizes(true)
                     .ButtonCount(5))
-      .HtmlAttributes(new { @class = "k-grid-full" })
+      //.HtmlAttributes(new { @class = "k-grid-full" })
+      .HtmlAttributes( new { style = "height: 590px;" } )
       .Navigatable()
       .Selectable(selectable => {
           selectable.Mode(GridSelectionMode.Single);

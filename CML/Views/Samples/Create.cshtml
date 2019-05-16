@@ -7,17 +7,17 @@
     <title>Create</title>
 </head>
 <body>
-    @using ( Html.BeginForm( "Create", "Samples", FormMethod.Post, new { id = "sampleForm" } ) )
+    @using ( Html.BeginForm( "Create_Sample", "Samples", FormMethod.Post, new { id = "sampleForm" } ) )
     {
 
         <div class="Request-Nav Top">
             <span>
                 <input type="button" id="btnTest" class="k-button k-primary " style=" margin:5px;" value="Back"
-                       onclick="location.href='@Url.Action("Index", "Test")'" />
+                       onclick="location.href='@Url.Action("GetTestView", "Test",new { id = Model.TestID } )'" />
             </span>
             <span class="float-right">
                 <input type="button" id="btnSub" value="Submit" style=" margin:5px;" class="k-button k-primary" />
-                <input type="button" id="btnSave" value="Save & Stay" style=" margin:5px;" class="k-button k-primary" />
+                @*<input type="button" id="btnSave" value="Save & Stay" style=" margin:5px;" class="k-button k-primary" />*@
 
             </span>
         </div>
@@ -27,7 +27,7 @@
                 <tr>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor( model => model.ID, htmlAttributes: new { @class = " control-label col-md-2" } )
+                           
                             <div class="col-md-10">
 
                                 @Html.EditorFor( model => model.ID, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
@@ -37,19 +37,19 @@
                     </td>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor( model => model.SampleType, htmlAttributes: new { @class = "control-label col-md-2" } )
+                            @Html.LabelFor( model => model.SampleTypeID, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @(Html.Kendo().DropDownListFor( model => model.SampleType )
-                                                                                                                                 .Name( "SampleType" )
-                                                                                                                                 .OptionLabel( "Please select" )
-                                                                                                                                 .DataTextField( "Text" )
-                                                                                                                                 .DataValueField( "Value" )
-                                                                                                                                 .BindTo( ViewData["sampletypes"] as SelectList )
-                                                                                                                                 .Events( ev => { ev.Change( "typesChanged" ); } )
+                                @(Html.Kendo().DropDownListFor( model => model.SampleTypeID )
+                                                                                                                                         .Name( "SampleTypeID" )
+                                                                                                                                         .OptionLabel( "Please select" )
+                                                                                                                                         .DataTextField( "Text" )
+                                                                                                                                         .DataValueField( "Value" )
+                                                                                                                                         .BindTo( ViewData["sampletypes"] as SelectList )
+                                                                                                                                         .Events( ev => { ev.Change( "typesChanged" ); } )
 
                                 )
                                 @* @(Html.EditorFor(model => model.AssignedTo));*@
-                                @Html.ValidationMessageFor( model => model.SampleType, "", new { @class = "text-danger" } )
+                                @Html.ValidationMessageFor( model => model.SampleTypeID, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
@@ -59,10 +59,10 @@
                 <tr>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor( model => model.TotalSamples, htmlAttributes: new { @class = " control-label col-md-2" } )
+                            @Html.LabelFor( model => model.TotalSamplesNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
                             <div class="col-md-10">
 
-                                @Html.EditorFor( model => model.TotalSamples, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
+                                @Html.EditorFor( model => model.TotalSamplesNbr, new { htmlAttributes = new { @class = "k-textbox form-control readonly", @readonly = "readonly" } } )
 
                             </div>
                         </div>
@@ -72,13 +72,13 @@
                             @Html.LabelFor( model => model.TestID, htmlAttributes: new { @class = " control-label col-md-2" } )
                             <div class="col-md-10">
 
-                                @Html.EditorFor( model => model.TestID, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
+                                @Html.EditorFor( model => model.TestID, new { htmlAttributes = new { @class = "k-textbox form-control readonly", @readonly = "readonly" } } )
 
                             </div>
                         </div>
                     </td>
                 </tr>
-                
+
 
             </table>
             <div id="dvStandard">
@@ -89,50 +89,50 @@
                                 @Html.LabelFor( model => model.OxideType, htmlAttributes: new { @class = "control-label col-md-2" } )
                                 <div class="col-md-10">
                                     @(Html.Kendo().DropDownListFor( model => model.OxideType )
-                                                                .Name( "OxideType" )
-                                                                .OptionLabel( "Please select" )
-                                                                .DataTextField( "Text" )
-                                                                .DataValueField( "Value" )
-                                                                .BindTo( new List<SelectListItem>() {
-                                                                                          new SelectListItem() {
-                                                                                              Text = "Leady",
-                                                                                              Value = "Leady"
-                                                                                          },
-                                                                                          new SelectListItem() {
-                                                                                              Text = "Red",
-                                                                                              Value = "Red"
-                                                                                          }
-                                                                      } )
+                                                                        .Name( "OxideType" )
+                                                                        .OptionLabel( "Please select" )
+                                                                        .DataTextField( "Text" )
+                                                                        .DataValueField( "Value" )
+                                                                        .BindTo( new List<SelectListItem>() {
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Leady",
+                                                                                                                      Value = "Leady"
+                                                                                                                  },
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Red",
+                                                                                                                      Value = "Red"
+                                                                                                                  }
+                                                                              } )
 
 
                                     )
                                     @* @(Html.EditorFor(model => model.AssignedTo));*@
-                                    @Html.ValidationMessageFor( model => model.SampleType, "", new { @class = "text-danger" } )
+
                                 </div>
                             </div>
                             <div class="form-group" id="dvSeparator">
                                 @Html.LabelFor( model => model.SeperatorType, htmlAttributes: new { @class = "control-label col-md-2" } )
                                 <div class="col-md-10">
                                     @(Html.Kendo().DropDownListFor( model => model.SeperatorType )
-                                                                .Name( "SeparatorType" )
-                                                                .OptionLabel( "Please select" )
-                                                                .DataTextField( "Text" )
-                                                                .DataValueField( "Value" )
-                                                                .BindTo( new List<SelectListItem>() {
-                                                                                          new SelectListItem() {
-                                                                                              Text = "Glass",
-                                                                                              Value = "Glass"
-                                                                                          },
-                                                                                          new SelectListItem() {
-                                                                                              Text = "Poly",
-                                                                                              Value = "Poly"
-                                                                                          }
-                                                                      } )
+                                                                        .Name( "SeparatorType" )
+                                                                        .OptionLabel( "Please select" )
+                                                                        .DataTextField( "Text" )
+                                                                        .DataValueField( "Value" )
+                                                                        .BindTo( new List<SelectListItem>() {
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Glass",
+                                                                                                                      Value = "Glass"
+                                                                                                                  },
+                                                                                                                  new SelectListItem() {
+                                                                                                                      Text = "Poly",
+                                                                                                                      Value = "Poly"
+                                                                                                                  }
+                                                                              } )
 
 
                                     )
                                     @* @(Html.EditorFor(model => model.AssignedTo));*@
-                                    @Html.ValidationMessageFor( model => model.SampleType, "", new { @class = "text-danger" } )
+
                                 </div>
                             </div>
 
@@ -141,14 +141,16 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><div class="form-group">
-    @Html.LabelFor( model => model.Number, htmlAttributes: new { @class = " control-label col-md-2" } )
-    <div class="col-md-10">
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.Nbr, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
 
-        @Html.EditorFor( model => model.Number, new { htmlAttributes = new { @class = "k-textbox form-control"} } )
+                                    @Html.EditorFor( model => model.Nbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
 
-    </div>
-</div></td>
+                                </div>
+                            </div>
+                        </td>
                         <td>
                             <div class="form-group">
                                 @Html.LabelFor( model => model.SampleIDs, htmlAttributes: new { @class = " control-label col-md-2" } )
@@ -161,14 +163,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><div class="form-group">
-    @Html.LabelFor( model => model.SampleDesc, htmlAttributes: new { @class = " control-label col-md-2" } )
-    <div class="col-md-10">
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.SampleDesc, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                <div class="col-md-10">
 
-        @Html.TextAreaFor( model => model.SampleDesc, new { @rows = "5", @cols = "50" } )
+                                    @Html.TextAreaFor( model => model.SampleDesc, new { @rows = "5", @cols = "50" } )
 
-    </div>
-</div></td>
+                                </div>
+                            </div>
+                        </td>
                         <td></td>
                     </tr>
                 </table>
@@ -223,10 +227,10 @@
                     <tr>
                         <td>
                             <div class="form-group">
-                                @Html.LabelFor( model => model.PosOtherNumber, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                @Html.LabelFor( model => model.PosOtherNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
                                 <div class="col-md-10">
 
-                                    @Html.EditorFor( model => model.PosOtherNumber, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+                                    @Html.EditorFor( model => model.PosOtherNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
 
                                 </div>
                             </div>
@@ -248,7 +252,7 @@
                                 @Html.LabelFor( model => model.PosComment, htmlAttributes: new { @class = " control-label col-md-2" } )
                                 <div class="col-md-10">
 
-                                    @Html.TextAreaFor( model => model.PosComment, new {  @rows = "5", @cols = "50" } )
+                                    @Html.TextAreaFor( model => model.PosComment, new { @rows = "5", @cols = "50" } )
 
                                 </div>
                             </div>
@@ -303,10 +307,10 @@
                     <tr>
                         <td>
                             <div class="form-group">
-                                @Html.LabelFor( model => model.NegOtherNumber, htmlAttributes: new { @class = " control-label col-md-2" } )
+                                @Html.LabelFor( model => model.NegOtherNbr, htmlAttributes: new { @class = " control-label col-md-2" } )
                                 <div class="col-md-10">
 
-                                    @Html.EditorFor( model => model.NegOtherNumber, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
+                                    @Html.EditorFor( model => model.NegOtherNbr, new { htmlAttributes = new { @class = "k-textbox form-control" } } )
 
                                 </div>
                             </div>
@@ -337,9 +341,10 @@
                     </tr>
                 </table>
             </div>
-           
-        </div>
 
+        </div>
+        @Html.HiddenFor( c => Model.IsNewSample )
+        @Html.HiddenFor( c => Model.TestAbbrev )
     }
 
     <script>
@@ -347,20 +352,104 @@
         $(document).ready(function () {
             $('#dvStandard').hide();
             $('#dvPlates').hide();
-           
+
+            //var ddl = $('#SampleTypeID').data("kendoDropDownList");
+            //setViews(ddl.text());
+
+            $('#PosTMBNbr').change(function (e) {
+
+                var v = $('#PosTMBNbr').val();
+                $('#PosTMBNbr').val(v * 3);
+                setTotalNbr();
+            });
+            $('#NegTMBNbr').change(function (e) {
+
+                var v = $('#NegTMBNbr').val();
+                $('#NegTMBNbr').val(v * 3);
+                setTotalNbr();
+            });
+            $('#PosStandardNbr').change(function (e) {
+                setTotalNbr();
+            });
+            $('#PosOtherNbr').change(function (e) {
+                setTotalNbr();
+            });
+            $('#NegStandardNbr').change(function (e) {
+                setTotalNbr();
+            });
+            $('#NegOtherNbr').change(function (e) {
+                setTotalNbr();
+            });
+            $('#Nbr').change(function (e) {
+
+                var ddl = $('#SampleTypeID').data("kendoDropDownList");
+                var type = ddl.text();
+                var abbrev = $('#TestAbbrev').val();
+
+                if (type == 'Separator' && abbrev == 'SEP-Comp/S') {
+                    var v = $('#Nbr').val();
+                    $('#Nbr').val(v * 3);
+                    
+                } setTotalNbr();
+            })
+            $('#btnSub').click(function (e) {
+
+                //    $('#SaveAndStay').val("False");
+                $('#sampleForm').submit();
+            })
+            //$('#btnSave').click(function (e) {
+            //    $('#SaveAndStay').val("True");
+            //    $('#sampleForm').submit();
+            //})
+
+            var isNew = $('#IsNewSample').val();
+            if (isNew == 'True') {
+                $('#ID').hide();
+            }
+
         })
 
         function typesChanged(e) {
-            var ddl = $('#SampleType').data("kendoDropDownList");
-           
-            var newValue = ddl.text();
+            var ddl = $('#SampleTypeID').data("kendoDropDownList");
 
+            var newValue = ddl.text();
+            $('[id$=Nbr]').val(0);
+            setViews(newValue);
+
+
+
+        }
+        function setTotalNbr() {
+
+            var total = 0;
+           
+            if ($('#dvStandard').is(":visible")) {
+                total = + isNaN($('#Nbr').val()) ? 0 : $('#Nbr').val();
+
+            } else {
+                var v1 = isNaN($('#PosStandardNbr').val()) ? 0 : $('#PosStandardNbr').val()
+                var v2 = isNaN($('#PosTMBNbr').val()) ? 0 : $('#PosTMBNbr').val();
+                var v3 = isNaN($('#PosOtherNbr').val()) ? 0 : $('#PosOtherNbr').val();
+                var v4 = isNaN($('#NegStandardNbr').val()) ? 0 : $('#NegStandardNbr').val();
+                var v5 = isNaN($('#NegTMBNbr').val()) ? 0 : $('#NegTMBNbr').val();
+                var v6 = isNaN($('#NegOtherNbr').val()) ? 0 : $('#NegOtherNbr').val();
+
+                total = (parseInt(v1) + parseInt(v2) + parseInt(v3) + parseInt(v4) + parseInt(v5) + parseInt(v6));
+
+            }
+
+
+            $('#TotalSamplesNbr').val(total);
+
+        }
+
+        function setViews(newValue) {
             if (newValue == 'Formed Plate' || newValue == 'Unformed Plate' || newValue == 'Grids' || newValue == 'Straps'
                 || newValue == 'Posts' || newValue == 'Welds' || newValue == 'Lugs') {
 
                 $('#dvPlates').show();
                 $('#dvStandard').hide();
-               
+
 
             } else if (newValue == 'Oxide') {
                 $('#dvPlates').hide();
@@ -373,18 +462,15 @@
                 $('#dvStandard').show();
                 $('#dvOxide').hide();
                 $('#dvSeparator').show();
-               
+
             } else {
                 $('#dvPlates').hide();
                 $('#dvStandard').show();
                 $('#dvOxide').hide();
                 $('#dvSeparator').hide();
-                
+
 
             }
-
-
-         
         }
     </script>
 </body>

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using CML.Models;
+using CML.Authorize;
 
 namespace CML.Controllers
 {
@@ -16,15 +17,17 @@ namespace CML.Controllers
     {
         private CMLEntities db = new CMLEntities();
 
+        [CMLRoleAuthorize( Authorize.Roles.Admin, Authorize.Roles.Manager )]
         public ActionResult Index()
         {
-            return View("Index", "_AdminLayout");
+            return View("Index");
         }
         private static IEnumerable<LocationModel> GetLocations()
         {
             var dbs = new CMLEntities();
-            var locs = dbs.CML_Location.Select(l => new LocationModel
+            var locs = dbs.CML_Location.Select( l => new LocationModel
             {
+                Code = l.Code,
                 LocationID = l.LocationID,
                 Location = l.Location
             });
@@ -44,6 +47,7 @@ namespace CML.Controllers
             {
                 var entity = new CML_Location
                 {
+                    Code = cML_Location.Code,
                     Location = cML_Location.Location,
                 };
 
@@ -62,6 +66,7 @@ namespace CML.Controllers
             {
                 var entity = new CML_Location
                 {
+                    Code = cML_Location.Code,
                     LocationID = cML_Location.LocationID,
                     Location = cML_Location.Location,
                 };
@@ -81,6 +86,7 @@ namespace CML.Controllers
             {
                 var entity = new CML_Location
                 {
+                    Code = cML_Location.Code,
                     LocationID = cML_Location.LocationID,
                     Location = cML_Location.Location,
                 };

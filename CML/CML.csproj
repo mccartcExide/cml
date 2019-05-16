@@ -159,24 +159,50 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Authorize\CMLRoleAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\BusinessUnitController.cs" />
+    <Compile Include="Controllers\ApprovalController.cs" />
+    <Compile Include="Controllers\BUController.cs" />
     <Compile Include="Controllers\CmlController.cs" />
-    <Compile Include="Controllers\CMLRoleProvider.cs" />
+    <Compile Include="Authorize\CMLRoleProvider.cs" />
+    <Compile Include="Controllers\DashController.cs" />
     <Compile Include="Controllers\DispositionController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\MessageVM.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PriorityController.cs" />
     <Compile Include="Controllers\RoleTypeController.cs" />
     <Compile Include="Controllers\SamplesController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Models\ApprovalGridModel.cs" />
+    <Compile Include="Models\ApprovalModel.cs" />
+    <Compile Include="Models\AttachmentsModel.cs" />
     <Compile Include="Models\CML_Approvals.cs">
       <DependentUpon>CMLModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CML_Attachments.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_BusinessUnit.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_Disposition.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_Location.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_Priority.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_RequestType.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_Roles.cs">
       <DependentUpon>CMLModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CML_RoleType.cs">
@@ -185,12 +211,24 @@
     <Compile Include="Models\CML_SampleType.cs">
       <DependentUpon>CMLModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CML_Settings.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_Status.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CML_TestDefinition.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CML_User.cs">
       <DependentUpon>CMLModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AttachmentsModel.cs" />
+    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\Note.cs">
+      <DependentUpon>CMLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Notification.cs">
       <DependentUpon>CMLModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PartialClasses.cs" />
@@ -219,27 +257,6 @@
       <DependentUpon>CMLModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\CMLRequest.cs" />
-    <Compile Include="Models\CML_BusinessUnit.cs">
-      <DependentUpon>CMLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CML_Disposition.cs">
-      <DependentUpon>CMLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CML_Location.cs">
-      <DependentUpon>CMLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CML_Priority.cs">
-      <DependentUpon>CMLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CML_RequestType.cs">
-      <DependentUpon>CMLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CML_Status.cs">
-      <DependentUpon>CMLModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CML_TestDefinition.cs">
-      <DependentUpon>CMLModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DispositionModel.cs" />
     <Compile Include="Models\LocationModel.cs" />
     <Compile Include="Models\PriorityModel.cs" />
@@ -261,7 +278,15 @@
     <Compile Include="Models\TestModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\BackgroundEmailer.cs" />
+    <Compile Include="Utilities\CacheManager.cs" />
+    <Compile Include="Utilities\CalculateSamples.cs" />
+    <Compile Include="Utilities\DashboardExtensions.cs" />
+    <Compile Include="Utilities\EntityExtension.cs" />
     <Compile Include="Utilities\RoleExtensions.cs" />
+    <Compile Include="Utilities\Structs.cs" />
+    <Compile Include="Utilities\UserExtensions.cs" />
+    <Compile Include="Utilities\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -724,6 +749,7 @@
     </Content>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1034,7 +1060,6 @@
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\BusinessUnit\Index.cshtml" />
     <Content Include="Views\Status\Index.cshtml" />
     <Content Include="Views\Disposition\Index.cshtml" />
     <Content Include="Views\Location\Index.cshtml" />
@@ -1059,6 +1084,18 @@
     <Content Include="Views\Files\_FilesUpload.cshtml" />
     <Content Include="Views\Test\_SamplesList.cshtml" />
     <Content Include="Views\Samples\Create.cshtml" />
+    <Content Include="Views\Samples\Update.cshtml" />
+    <Content Include="Views\BU\Index.cshtml" />
+    <Content Include="Views\Request\_ApprovalsView.cshtml" />
+    <Content Include="Views\Approval\Index.cshtml" />
+    <Content Include="Views\Approval\ActionApprovalView.cshtml" />
+    <Content Include="Views\Test\_Durations.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\Request\_NotificationView.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Test\_NotificationView.cshtml" />
+    <Content Include="Views\Dash\Index.cshtml" />
+    <Content Include="Views\Approval\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

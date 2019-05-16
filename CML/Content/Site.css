@@ -8,7 +8,9 @@ article, aside, canvas, details, footer, header, section {
     font-size: 100%;
     font: inherit;
 }
-
+.readonly{
+    background-color:gainsboro !important;
+}
 .Request-Nav {
     background-color: white;
    
@@ -31,7 +33,34 @@ article, aside, canvas, details, footer, header, section {
    float:right;
 }
     
+.ApprovLabel{
+    padding-right:10px;
+  
+    color:darkblue;
+    width: 120px;
+        }
+.ApprovBtns {
+    padding: 10px 40px 10px 40px;
+    margin-left:40px;
+    margin-right:40px;
 
+}
+.ApprovYes{
+    background-color:lightgreen;
+}
+.ApprovNo{
+    background-color:lightcoral;
+}
+.ApprovTbl {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: larger;
+}
+.ApprovNormal{
+    color:black;
+}
 .alert-dismissable,
 .alert-dismissible {
     padding-right: 35px;

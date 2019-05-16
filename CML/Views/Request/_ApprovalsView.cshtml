@@ -1,0 +1,52 @@
+﻿@(Html.Kendo().Grid<CML.Models.CML_Approvals>()
+              .Name( "approvalgrid" )
+              .Columns( columns =>
+              {
+                  columns.Bound( c => c.ID ).Width( 80 ).ClientTemplate(  Html.ActionLink( "Action", "GetApprovalRec", "Approval", new { id = "#=ID#", req = "#=RequestID#" }, new { @class = "k-button k-primary" } ).ToHtmlString() ).Title("");
+                  columns.ForeignKey( c => c.UserID, ( System.Collections.IEnumerable )ViewData["recipients"], "ID", "DisplayName" ).Width(150);
+                  columns.Bound( c => c.Outcome ).Width( 80 );
+                  columns.Bound( c => c.DateAssigned ).Format( "{0:MM/dd/yyyy}" ).Width(110).Title("Assigned");
+                  columns.Bound( c => c.DateActioned ).Format( "{0:MM/dd/yyyy}" ).Width( 110 ).Title("Actioned");
+                  columns.Bound( c => c.Comments );
+                  //columns.Bound(c => c.CML_User.DisplayName);
+              } )
+              .ToolBar( toolbar =>
+              {
+                  toolbar.Excel();
+
+              } )
+              .ColumnMenu()
+              .Pageable()
+              .Navigatable()
+              .Selectable( selectable =>
+              {
+                  selectable.Mode( GridSelectionMode.Single );
+                  selectable.Type( GridSelectionType.Row );
+              } )
+              .Sortable( sortable =>
+              {
+                  sortable.SortMode( GridSortMode.SingleColumn );
+              } )
+              .Filterable()
+              .Scrollable()
+              .DataSource( dataSource => dataSource
+                   .Ajax()
+                   .Read( read => read.Action( "Approvals_Read", "Request" ).Data( "GetReqID" ) )
+              )
+              .HtmlAttributes( new { style = "height:550px;" } )
+
+)
+<script>
+    //function showDetails(e) {
+
+    //    e.preventDefault();
+
+    //    var dataitem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    //    window.location.href = "Test/GetTest?id=" + dataitem["TestID"]
+
+    //}
+    function GetReqID() {
+        return { reqid: $('#RequestID').val() };
+    }
+</script>

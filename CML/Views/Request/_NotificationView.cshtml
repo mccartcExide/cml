@@ -1,0 +1,37 @@
+﻿@(Html.Kendo().Grid<CML.Models.Notification>()
+          .Name( "notificationgrid" )
+          .Columns( columns =>
+          {
+              columns.ForeignKey( c => c.Recipient, ( System.Collections.IEnumerable )ViewData["recipients"], "ID", "DisplayName" ).Title("Recipient");
+              columns.Bound( c => c.MessageType );
+              columns.Bound( c => c.LoggedOn ).Format( "{0:MM/dd/yyyy}" ).Width( 110 );
+              columns.Bound( c => c.SentOn ).Format( "{0:MM/dd/yyyy}" ).Width( 110 );
+              columns.Bound( c => c.Sent );
+
+          } )
+          .ColumnMenu()
+
+          .Pageable()
+          .Navigatable()
+          .Sortable( sortable =>
+          {
+              sortable.SortMode( GridSortMode.SingleColumn );
+          } )
+          .Filterable()
+          .Scrollable()
+          .DataSource( dataSource => dataSource
+               .Ajax()
+               .Model( model => model.Id( p => p.ID ) )
+               .Read( read => read.Action( "Notifications_Read", "Notification" ).Data( "GetReqID" ) )
+
+          )
+          .HtmlAttributes( new { style = "height:550px;" } )
+)
+
+<script>
+    
+    function GetReqID() {
+       
+        return { reqid: $('#RequestID').val() };
+    }
+</script>

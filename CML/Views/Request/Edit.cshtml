@@ -9,47 +9,87 @@
     <title>Edit</title>
 </head>
 <body>
-    @using (Html.BeginForm("SaveChanges", "Request", FormMethod.Post, new { id = "requestsForm" }))
+    @using ( Html.BeginForm( "SaveChanges", "Request", FormMethod.Post, new { id = "requestsForm" } ) )
     {
 
-       
+
 
     <div class="Request-Nav Top">
-      
+     @if ( ( Model.TotalSamples >= 1 && Model.StatusID < 2 ) || Model.StatusID == 7 || Model.StatusID == 6 )
+     {
         <span>
             <input type="button" class="k-button k-primary" style=" margin:5px;" value="Request Approval"
-                   onclick="location.href='@Url.Action("RequestApproval", "Request",new { id = Model.RequestID })'" />
+                   onclick="location.href='@Url.Action( "RequestApproval", "Request", new { id = Model.RequestID } )'" />
         </span>
+     }
+     @if (( Model.StatusID == 1 || Model.IsManager) && Model.StatusID!=5 )
+     {
         <span>
             <input type="button" class="k-button k-primary" style=" margin:5px;" value="Add Test"
-                   onclick="location.href='@Url.Action("CreateTest", "Request",new { id = Model.RequestID })'" />
+                   onclick="location.href='@Url.Action( "CreateTest", "Request", new { id = Model.RequestID } )'" />
         </span>
+     }
+        @if ( Model.StatusID == 2 )
+        {
         <span>
-            <input type="button" class="k-button k-primary" style=" margin:5px;" value="Cancel Approval"
-                   onclick="location.href='@Url.Action("CancelApproval", "Request",new { id = Model.RequestID })'" />
-        </span>
-        <span>
-            <input type="button" class="k-button k-primary" style=" margin:5px;" value="Delete Request"
-                   onclick="location.href='@Url.Action("Destroy", "Request",new { id = Model.RequestID })'" />
-        </span>
 
+            @(Html.Kendo().Button()
+                                    .Name( "CancelApproval" )
+                                    .Content( "Cancel Approval" )
+                                    .HtmlAttributes( new { type = "button", @class= "k-button k-primary" } )
+                .Events( ev => ev.Click( "cancelApproval" ) ))
+            
+
+            @*<input type="button" class="k-button k-primary" style=" margin:5px;" value="Cancel Approval"
+                   onclick="location.href='@Url.Action( "CancelApproval", "Request", new { id = Model.RequestID } )'" />*@
+        </span>
+        }
+        @if ( Model.StatusID != 5 )
+        {
+        <span>
+            @(Html.Kendo().Button()
+                                                 .Name( "CancelRequest" )
+                                                 .Content( "Cancel Request" )
+                                                 .HtmlAttributes( new { type = "button", @class = "k-button k-primary" } )
+                             .Events( ev => ev.Click( "cancelRequest" ) ))
+            @*<input type="button" class="k-button k-primary" style=" margin:5px;" value="Cancel Request"
+                   onclick="location.href='@Url.Action("CancelRequest", "Request",new { id = Model.RequestID, onclick = "return confirm('Are you sure you want to cancel this request?')" } )'" />*@
+        </span>
+        }
+        @if ( Model.StatusID == 8 )
+        {
+        <span>
+            @(Html.Kendo().Button()
+                                                        .Name( "CompleteRequest" )
+                                                        .Content( "Complete Request" )
+                                                        .HtmlAttributes( new { type = "button", @class = "k-button k-primary" } )
+                                    .Events( ev => ev.Click( "completeRequest" ) ))
+        </span>
+        }
         <span >
             <input type="button" class="k-button k-primary " style=" margin:5px;" value="Back to List"
                    onclick="location.href='@Url.Action("Index", "Request")'" />
         </span>
 
         
-
+        @if ( Model.StatusID != 5 )
+        {
         <span class="float-right" >
              <input type="submit" value="Save changes" style=" margin:5px;" class="k-button k-primary" />
         </span>
-
+        }
     </div>
 
-        <div class="form-horizontal">
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.RequestID)
+    <div class="form-horizontal">
+       
+            <div id="msgAp" class="alert alert-info">
+                <strong>Info</strong>
+                This request required director level approval!
+            </div>
+        
+        @Html.ValidationSummary( true, "", new { @class = "text-danger" } )
+        @Html.HiddenFor( model => model.RequestID )
+        @Html.HiddenFor(model => model.AssigneeeChanged)
             <table class="table req-new">
 
                 <tr>
@@ -57,24 +97,35 @@
                     <td>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
 
-                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                @Html.EditorFor( model => model.Name, new { htmlAttributes = new { @class = "form-control readonly", @readonly = "readonly" } } )
+                                @Html.ValidationMessageFor( model => model.Name, "", new { @class = "text-danger" } )
                             </div>
                         </div>
                     </td>
-                    <td></td>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.RequestID, htmlAttributes: new { @class = "control-label col-md-2" } )
+                            <div class="col-md-10">
+
+                                @Html.EditorFor( model => model.RequestID, new { htmlAttributes = new { @class = "form-control k-textbox readonly", @readonly = "readonly" } } )
+
+                            </div>
+                        </div>
+
+
+                    </td>
                 </tr>
                 <tr>
 
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.CMLNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.CMLNumber, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.CMLNumber, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.CMLNumber, "", new { @class = "text-danger" })
+                                @Html.EditorFor( model => model.CMLNumber, new { htmlAttributes = new { @class = "form-control readonly", @readonly = "readonly" } } )
+                                @Html.ValidationMessageFor( model => model.CMLNumber, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
@@ -83,10 +134,11 @@
                     <td>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.StatusID, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.StatusID, "Status", htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.TextBox("Status", "Open", new { @disabled = "disabled", @class = "k.textbox" })
-                                @Html.HiddenFor(model => Model.StatusID)
+                                @Html.EditorFor( model => model.CML_Status.Status, new { htmlAttributes = new { @class = "form-control readonly" } } )
+                                @*@Html.TextBox( "Status", "Open", new { @disabled = "disabled", @class = "k.textbox" } )*@
+                                @Html.HiddenFor( model => Model.StatusID )
                             </div>
                         </div>
 
@@ -98,35 +150,36 @@
                 <tr>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.LocationID, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.LocationID, "Location", htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
                                 @*@Html.DropDownList("LocationID", null, htmlAttributes: new { @class = "form-control" })*@
 
-                                @(Html.Kendo().DropDownListFor(model => model.LocationID)
-                                                                                                           .Name("LocationID")
-                                                                                                            .OptionLabel("Please Select")
-                                                                                                            .DataTextField("Text")
-                                                                                                            .DataValueField("Value")
-                                                                                                          .BindTo(ViewData["locationsddl"] as SelectList).Name("LocationID")
-                                                                                                                                                                                                                                                                                                                                     .BindTo(ViewData["locationsddl"] as SelectList)
+                                @(Html.Kendo().DropDownListFor( model => model.LocationID )
+                                                                                                                                   .Name( "LocationID" )
+                                                                                                                                    .OptionLabel( "Please Select" )
+                                                                                                                                    .DataTextField( "Text" )
+                                                                                                                                    .DataValueField( "Value" )
+                                                                                                                                  .BindTo( ViewData["locationsddl"] as SelectList ).Name( "LocationID" )
+                                                                                                                                                                                                                                                                                                                                                             .BindTo( ViewData["locationsddl"] as SelectList )
                                 )
-                                @Html.ValidationMessageFor(model => model.LocationID, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor( model => model.LocationID, "", new { @class = "text-danger" } )
                             </div>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.PriorityID, "Priority", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.PriorityID, "Priority", htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @(Html.Kendo().DropDownListFor(model => model.PriorityID)
-                                                                                                                        .Name("PriorityID")
-                                                                                                                         .OptionLabel("Please Select")
-                                                                                                                            .DataTextField("Text")
-                                                                                                                            .DataValueField("Value")
-                                                                                                                           .BindTo(ViewData["priorityddl"] as SelectList)
+                                @(Html.Kendo().DropDownListFor( model => model.PriorityID )
+                                                                                                                                                .Name( "PriorityID" )
+                                                                                                                                                 .OptionLabel( "Please Select" )
+                                                                                                                                                    .DataTextField( "Text" )
+                                                                                                                                                    .DataValueField( "Value" )
+                                                                                                                                                   .BindTo( ViewData["priorityddl"] as SelectList )
+                                                                                                                                                   .Events( ev => ev.Change( "priorityChange" ) )
 
                                 )
-                                @Html.ValidationMessageFor(model => model.PriorityID, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor( model => model.PriorityID, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
@@ -136,17 +189,17 @@
                     <td>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.RequestedBy, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.RequestedBy, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @(Html.Kendo().DropDownListFor(model => model.RequestedBy)
-                                           .Name("RequestedBy")
-                                           .OptionLabel("Please select")
-                                           .DataTextField("Text")
-                                           .DataValueField("Value")
-                                           .BindTo(ViewData["requesterddl"] as SelectList)
+                                @(Html.Kendo().DropDownListFor( model => model.RequestedBy )
+                                                                   .Name( "RequestedBy" )
+                                                                   .OptionLabel( "Please select" )
+                                                                   .DataTextField( "Text" )
+                                                                   .DataValueField( "Value" )
+                                                                   .BindTo( ViewData["requesterddl"] as SelectList )
                                 )
                                 @*  @Html.EditorFor(model => model.RequestedBy, new { htmlAttributes = new { @class = "form-control" } })*@
-                                @Html.ValidationMessageFor(model => model.RequestedBy, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor( model => model.RequestedBy, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
@@ -156,16 +209,16 @@
                     <td>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.RequestTypeID, "Request Type", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.RequestTypeID, "Request Type", htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @(Html.Kendo().DropDownListFor(model => model.RequestTypeID)
-                                                                                                               .Name("RequestTypeID")
-                                                                                                                .OptionLabel("Please Select")
-                                                                                                                   .DataTextField("Text")
-                                                                                                                   .DataValueField("Value")
-                                                                                                                  .BindTo(ViewData["request_typesddl"] as SelectList)
+                                @(Html.Kendo().DropDownListFor( model => model.RequestTypeID )
+                                                                                                                                       .Name( "RequestTypeID" )
+                                                                                                                                        .OptionLabel( "Please Select" )
+                                                                                                                                           .DataTextField( "Text" )
+                                                                                                                                           .DataValueField( "Value" )
+                                                                                                                                          .BindTo( ViewData["request_typesddl"] as SelectList )
                                 )
-                                @Html.ValidationMessageFor(model => model.RequestTypeID, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor( model => model.RequestTypeID, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
@@ -177,16 +230,16 @@
                     <td>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.BusinessUnitID, "Business Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.BusinessUnitID, "Business Unit", htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @(Html.Kendo().DropDownListFor(model => model.BusinessUnitID)
-                                                                                                                         .Name("BusinessUnitID")
-                                                                                                                          .OptionLabel("Please Select")
-                                                                                                                             .DataTextField("Text")
-                                                                                                                             .DataValueField("Value")
-                                                                                                                             .BindTo(ViewData["businessunitddl"] as SelectList)
+                                @(Html.Kendo().DropDownListFor( model => model.BusinessUnitID )
+                                                                                                                                                 .Name( "BusinessUnitID" )
+                                                                                                                                                  .OptionLabel( "Please Select" )
+                                                                                                                                                     .DataTextField( "Text" )
+                                                                                                                                                     .DataValueField( "Value" )
+                                                                                                                                                     .BindTo( ViewData["businessunitddl"] as SelectList )
                                 )
-                                @Html.ValidationMessageFor(model => model.BusinessUnitID, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor( model => model.BusinessUnitID, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
@@ -197,24 +250,24 @@
                     <td>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DispositionID, "Disposition", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.DispositionID, "Disposition", htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @(Html.Kendo().DropDownListFor(model => model.DispositionID)
-                                                                                                                      .Name("DispositionID")
-                                                                                                                       .OptionLabel("Please Select")
-                                                                                                                          .DataTextField("Text")
-                                                                                                                          .DataValueField("Value")
-                                                                                                                         .BindTo(ViewData["dispositionddl"] as SelectList)
-                                                                                                                         .Events(ev => { ev.Change("dispChange").DataBound("dispBound"); })
+                                @(Html.Kendo().DropDownListFor( model => model.DispositionID )
+                                                                                                                                              .Name( "DispositionID" )
+                                                                                                                                               .OptionLabel( "Please Select" )
+                                                                                                                                                  .DataTextField( "Text" )
+                                                                                                                                                  .DataValueField( "Value" )
+                                                                                                                                                 .BindTo( ViewData["dispositionddl"] as SelectList )
+                                                                                                                                                 .Events( ev => { ev.Change( "dispChange" ).DataBound( "dispBound" ); } )
                                 )
-                                @Html.ValidationMessageFor(model => model.DispositionID, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor( model => model.DispositionID, "", new { @class = "text-danger" } )
                             </div>
                         </div>
                         <div class="form-group retention">
-                            @Html.LabelFor(model => model.RetentionDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.RetentionDate, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.RetentionDate, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.RetentionDate, "", new { @class = "text-danger" })
+                                @Html.EditorFor( model => model.RetentionDate, new { htmlAttributes = new { @class = "form-control" } } )
+                                @Html.ValidationMessageFor( model => model.RetentionDate, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
@@ -224,46 +277,19 @@
                 <tr>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.ProjectNumber, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.ProjectNumber, "", new { @class = "text-danger" })
+                                @Html.EditorFor( model => model.ProjectNumber, new { htmlAttributes = new { @class = "form-control" } } )
+                                @Html.ValidationMessageFor( model => model.ProjectNumber, "", new { @class = "text-danger" } )
                             </div>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.DeviationNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.DeviationNumber, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.DeviationNumber, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.AssignedTo, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                               @(Html.Kendo().DropDownListFor(model => model.AssignedTo)
-                                    .Name("AssignedTo")
-                                    .OptionLabel("Please select")
-                                    .DataTextField("Text")
-                                    .DataValueField("Value")
-                                    .BindTo(ViewData["assigneddl"] as SelectList)
-                                    )
-                               @* @(Html.EditorFor(model => model.AssignedTo));*@
-                                @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
+                                @Html.EditorFor( model => model.Phone, new { htmlAttributes = new { @class = "form-control" } } )
+                                @Html.ValidationMessageFor( model => model.Phone, "", new { @class = "text-danger" } )
                             </div>
                         </div>
                     </td>
@@ -271,180 +297,242 @@
                 <tr>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.EWRNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.DeviationNumber, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.EWRNumber, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.EWRNumber, "", new { @class = "text-danger" })
+                                @Html.EditorFor( model => model.DeviationNumber, new { htmlAttributes = new { @class = "form-control" } } )
+                                @Html.ValidationMessageFor( model => model.DeviationNumber, "", new { @class = "text-danger" } )
                             </div>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DateRequired, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.AssignedTo, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.DateRequired, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.DateRequired, "", new { @class = "text-danger" })
+                                @(Html.Kendo().DropDownListFor( model => model.AssignedTo )
+                                                             .Name( "AssignedTo" )
+                                                             .OptionLabel( "Please select" )
+                                                             .DataTextField( "Text" )
+                                                             .DataValueField( "Value" )
+                                                             .BindTo( ViewData["assigneddl"] as SelectList )
+                                                             .Events( ev => ev.Change( "AssigneeChanged" ) )
+                                )
+                                @* @(Html.EditorFor(model => model.AssignedTo));*@
+                                @Html.ValidationMessageFor( model => model.AssignedTo, "", new { @class = "text-danger" } )
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.EWRNumber, htmlAttributes: new { @class = "control-label col-md-2" } )
+                            <div class="col-md-10">
+                                @Html.EditorFor( model => model.EWRNumber, new { htmlAttributes = new { @class = "form-control" } } )
+                                @Html.ValidationMessageFor( model => model.EWRNumber, "", new { @class = "text-danger" } )
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.DateRequired, htmlAttributes: new { @class = "control-label col-md-2" } )
+                            <div class="col-md-10">
+                                @Html.EditorFor( model => model.DateRequired, new { htmlAttributes = new { @class = "form-control" } } )
+                                @Html.ValidationMessageFor( model => model.DateRequired, "", new { @class = "text-danger" } )
                             </div>
                         </div>
 
 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( model => model.TotalSamples, htmlAttributes: new { @class = "control-label col-md-2" } )
+                            <div class="col-md-10">
+                                @Html.EditorFor( model => model.TotalSamples, new { htmlAttributes = new { @class = "form-control k-textbox", @readonly = "readonly" } } )
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor( m => m.WatchList, htmlAttributes: new { @class = "control-label col-md-2" } )
+                            <div class="col-md-10">
+                                @(Html.Kendo().MultiSelectFor( m => m.WatchList )
+                                                .Name( "Watchlist" )
+                                                .AutoClose( true )
+                                                .DataTextField( "DisplayName" )
+                                                .DataValueField( "ID" )
+                                                .AutoBind( true )
+                                                            .DataSource( source =>
+                                                             {
+                                                                 source.Read( read =>
+                                                                 {
+                                                                     read.Action( "WatchList_Read", "Request" );
+                                                                 } )
+                                                                 .ServerFiltering( true );
+                                                             } )
+                                )
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>
 
                     <td colspan="2">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.TestObjectives, htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor( model => model.TestObjectives, htmlAttributes: new { @class = "control-label col-md-2" } )
                             <div class="col-md-10">
-                                @Html.TextAreaFor(model => model.TestObjectives, new { style = "width:100%;", @rows = "5", @cols = "100" })
-                                @Html.ValidationMessageFor(model => model.TestObjectives, "", new { @class = "text-danger" })
+                                @Html.TextAreaFor( model => model.TestObjectives, new { style = "width:100%;", @rows = "5", @cols = "100" } )
+                                @Html.ValidationMessageFor( model => model.TestObjectives, "", new { @class = "text-danger" } )
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td >
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.TotalSamples, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.TotalSamples, new { htmlAttributes = new { @class = "form-control k-textbox", @readonly = "readonly" } })
+                @if ( Model.StatusID == 8 || Model.StatusID == 5 )
+                {
+                    <tr id="trClosureNote">
 
+                        <td colspan="2">
+                            <div class="form-group">
+                                @Html.LabelFor( model => model.ClosureNotes, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor( model => model.ClosureNotes, new { style = "width:100%;", @rows = "5", @cols = "100" } )
+                                    @Html.ValidationMessageFor( model => model.ClosureNotes, "", new { @class = "text-danger" } )
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td></td>
-                </tr>
+                        </td>
+                    </tr>
+                }
                 <tr>
                     <td colspan="2">
                         @(Html.Kendo().TabStrip()
-                                                       .Name("SubItems")
-                                                       .TabPosition(TabStripTabPosition.Left)
-                                                       .Animation(a =>
-                                                       {
-                                                           a.Open(config =>
-                                                           {
-                                                               config.Fade(FadeDirection.In);
-                                                           });
-                                                       })
-                                                       .Events(ev => ev.Activate("resize"))
-                                                        .SelectedIndex(0)
-                                                        .Items(items =>
-                                                        {
-                                                        @*items.Add().Text("Tests")
-                                          .Content(@<text>
-                                            @{Html.RenderPartial("_Tests");}
-                                        </text>);*@
-                                                    items.Add()
-                                                    .Text("Tests")
-                                                    .Content(Html.Partial("~/Views/Request/_Tests.cshtml").ToHtmlString());
+                                                                               .Name( "SubItems" )
+                                                                               .TabPosition( TabStripTabPosition.Left )
+                                                                               .Animation( a =>
+                                                                                {
+                                                                                    a.Open( config =>
+                                                                                         {
+                                                                                             config.Fade( FadeDirection.In );
+                                                                                         } );
+                                                                                } )
+                                                                               .Events( ev => ev.Activate( "resize" ) )
+                                                                                .SelectedIndex( 0 )
+                                                                                .Items( items =>
+                                                                                 {
+                                                                                @*items.Add().Text("Tests")
+                                                                          .Content(@<text>
+                                                                            @{Html.RenderPartial("_Tests");}
+                                                                        </text>);*@
+                                                                            items.Add()
+                                                                                    .Text( "Tests" )
+                                                                                    .Content( Html.Partial( "~/Views/Request/_Tests.cshtml" ).ToHtmlString() );
 
 
-                                                    items.Add().Text("Dates")
-                                                                                                      .Content(@<text>
-                                                        <table>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        @Html.LabelFor(model => model.CreatedOn, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                                        <div class="col-md-10">
-                                                                            @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control" } })
-                                                                            @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                                        <div class="col-md-10">
-                                                                            @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
-                                                                            @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        @Html.LabelFor(model => model.UpdateOn, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                                        <div class="col-md-10">
-                                                                            @Html.EditorFor(model => model.UpdateOn, new { htmlAttributes = new { @class = "form-control" } })
-                                                                            @Html.ValidationMessageFor(model => model.UpdateOn, "", new { @class = "text-danger" })
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        @Html.LabelFor(model => model.UpdatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                                        <div class="col-md-10">
-                                                                            @Html.EditorFor(model => model.UpdatedBy, new { htmlAttributes = new { @class = "form-control" } })
-                                                                            @Html.ValidationMessageFor(model => model.UpdatedBy, "", new { @class = "text-danger" })
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        @Html.LabelFor(model => model.TestsStarted, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                                        <div class="col-md-10">
-                                                                            @Html.EditorFor(model => model.TestsStarted, new { htmlAttributes = new { @class = "form-control" } })
-                                                                            @Html.ValidationMessageFor(model => model.TestsStarted, "", new { @class = "text-danger" })
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        @Html.LabelFor(model => model.TestsFinished, htmlAttributes: new { @class = "control-label col-md-2" })
-                                                                        <div class="col-md-10">
-                                                                            @Html.EditorFor(model => model.TestsFinished, new { htmlAttributes = new { @class = "form-control" } })
-                                                                            @Html.ValidationMessageFor(model => model.TestsFinished, "", new { @class = "text-danger" })
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
+                                                                            items.Add().Text( "Dates" )
+                                                                                                                                      .Content(@<text>
+                                                                                                                                    <table>
+                                                                                                                                        <tr>
+                                                                                                                                            <td>
+                                                                                                                                                <div class="form-group">
+                                                                                                                                                    @Html.LabelFor( model => model.CreatedOn, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                                                                                    <div class="col-md-10">
+                                                                                                                                                        @Html.EditorFor( model => model.CreatedOn, new { htmlAttributes = new { @class = "form-control" } } )
+                                                                                                                                                        @Html.ValidationMessageFor( model => model.CreatedOn, "", new { @class = "text-danger" } )
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </td>
+                                                                                                                                            <td>
+                                                                                                                                                <div class="form-group">
+                                                                                                                                                    @Html.LabelFor( model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                                                                                    <div class="col-md-10">
+                                                                                                                                                        @Html.EditorFor( model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } } )
+                                                                                                                                                        @Html.ValidationMessageFor( model => model.CreatedBy, "", new { @class = "text-danger" } )
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <tr>
+                                                                                                                                            <td>
+                                                                                                                                                <div class="form-group">
+                                                                                                                                                    @Html.LabelFor( model => model.UpdateOn, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                                                                                    <div class="col-md-10">
+                                                                                                                                                        @Html.EditorFor( model => model.UpdateOn, new { htmlAttributes = new { @class = "form-control" } } )
+                                                                                                                                                        @Html.ValidationMessageFor( model => model.UpdateOn, "", new { @class = "text-danger" } )
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </td>
+                                                                                                                                            <td>
+                                                                                                                                                <div class="form-group">
+                                                                                                                                                    @Html.LabelFor( model => model.UpdatedBy, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                                                                                    <div class="col-md-10">
+                                                                                                                                                        @Html.EditorFor( model => model.UpdatedBy, new { htmlAttributes = new { @class = "form-control" } } )
+                                                                                                                                                        @Html.ValidationMessageFor( model => model.UpdatedBy, "", new { @class = "text-danger" } )
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </td>
+                                                                                                                                        </tr>
+                                                                                                                                        <tr>
+                                                                                                                                            <td>
+                                                                                                                                                <div class="form-group">
+                                                                                                                                                    @Html.LabelFor( model => model.TestsStarted, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                                                                                    <div class="col-md-10">
+                                                                                                                                                        @Html.EditorFor( model => model.TestsStarted, new { htmlAttributes = new { @class = "form-control" } } )
+                                                                                                                                                        @Html.ValidationMessageFor( model => model.TestsStarted, "", new { @class = "text-danger" } )
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </td>
+                                                                                                                                            <td>
+                                                                                                                                                <div class="form-group">
+                                                                                                                                                    @Html.LabelFor( model => model.TestsFinished, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                                                                                    <div class="col-md-10">
+                                                                                                                                                        @Html.EditorFor( model => model.TestsFinished, new { htmlAttributes = new { @class = "form-control" } } )
+                                                                                                                                                        @Html.ValidationMessageFor( model => model.TestsFinished, "", new { @class = "text-danger" } )
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </td>
+                                                                                                                                        </tr>
 
-                                                        </table>
-                                                                                                    </text>);
-                                                                                            items.Add().Text("Approvals")
-                                                                                                      .Content(@<text>
-                                                                                                Approvals go here
-                                                                                                    </text>);
-                                                                                            items.Add().Text("Notes")
-                                                                                                        .Content(@<text>
-                                                                                                        <table>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <div class="form-group">
-                                                                                                                        @Html.LabelFor( model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" } )
-                                                                                                                        <div class="col-md-10">
-                                                                                                                            @Html.TextAreaFor( model => model.Note, new { style = "width:100%;", @rows = "5", @cols = "100" } )
-                                                                                                                            
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    @foreach(var note in Model.RequestNotes)
-                                                                                                                    {
-                                                                                                                        <div class="form-group">
-                                                                                                                            <span style="font-weight:bold;font-size:small;">@Html.DisplayFor(m => note.CreatedOn) @Html.DisplayFor(m => note.CreatedBy) </span>
-                                                                                                                            <div class="col-md-10">
-                                                                                                                                @Html.DisplayFor(m => note.NoteText)
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    }
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        </table>                            
-                                                                                                </text>);
-                                                                                              items.Add().Text("Emails")
-                                                                                                           .Content(@<text>
-                                                                                                    Emails go here
-                                                                                                        </text>);
-                                                            items.Add().Text("Attachments")
-                                                                         .Content( Html.Partial( "~/Views/Files/_FilesUpload.cshtml",Model.Attachments ).ToHtmlString() );
-                                                        })
+                                                                                                                                    </table>
+                                                                                                                                    </text>);
+                                                                       items.Add().Text( "Approvals" )
+                                                  .Content( Html.Partial( "~/Views/Request/_ApprovalsView.cshtml" ).ToHtmlString() );
+                                                                       items.Add().Text( "Notes" )
+                                                    .Content(@<text>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor( model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                    <div class="col-md-10">
+                                                                        @Html.TextAreaFor( model => model.Note, new { style = "width:100%;", @rows = "5", @cols = "100" } )
+
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                @foreach ( var note in Model.RequestNotes )
+                                                            {
+                                                            <div class="form-group">
+                                                                <span style="font-weight:bold;font-size:small;">@Html.DisplayFor( m => note.CreatedOn ) @Html.DisplayFor( m => note.CreatedBy ) </span>
+                                                                <div class="col-md-10">
+                                                                    @Html.DisplayFor( m => note.NoteText )
+                                                                </div>
+                                                            </div>
+                                                    }
+                                                        
+
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    </text>);
+                                                                 items.Add().Text( "Emails" )
+                                                                      .Content( Html.Partial( "~/Views/Request/_NotificationView.cshtml" ).ToHtmlString() );
+                                                                 items.Add().Text( "Attachments" )
+                                                                     .Content( Html.Partial( "~/Views/Files/_FilesUpload.cshtml", Model.Attachments ).ToHtmlString() );
+                                                             } )
                         )
                     </td>
                 </tr>
@@ -462,18 +550,18 @@
             </table>
 
 
-            <div class="Request-Nav Bottom" >
-                <div class="col-md-offset-2 col-md-10 ">
-                    <input type="submit" value="Save changes" class="float-right k-button k-primary" />
-                </div>
+        <div class="Request-Nav Bottom">
+            <div class="col-md-offset-2 col-md-10 ">
+                <input type="submit" value="Save changes" class="float-right k-button k-primary" />
             </div>
-
-
-
         </div>
 
 
 
+    </div>
+
+
+    @Html.HiddenFor(c=> c.DirectorApprovalRequired)
        
     }
 </body>
@@ -484,7 +572,46 @@
 <script>
     $(document).ready(function () {
         $("#Name").prop("readonly", "true");
+        var approvalReq = $('#DirectorApprovalRequired').val();
+       
+        if (approvalReq == "True")
+            $('#msgAp').show()
+        else
+            $('#msgAp').hide();
+
     })
+
+    //function priorityChange() {
+
+    //}
+    function AssigneeChanged(e) {
+        $('#AssigneeeChanged').val(true);
+    }
+    function priorityChange(e) {
+       
+        var id = $('#RequestID').val();
+        var dataItem = this.dataItem(e.item);
+
+        $.ajax({
+            type: 'GET',
+            url: '/Request/CheckApproval',
+            data: { id: id, priorityid: dataItem.Value },
+            success: function (data) {
+                if (data.IsApprovalRequired) {
+                    $('#msgAp').show();
+                } else {
+                    $('#msgAp').hide();
+                }
+            },
+            error: function (xhr) {
+                alert('The check for approval has failed.');
+            }
+
+        })
+
+    }
+
+   
 
     function resize(e) {
         $('#testgrid').resize();
@@ -517,6 +644,71 @@
         } else {
             $(".retention").hide();
         }
+    }
+    function cancelApproval() {
+        if (confirm('Are you sure you want to cancel the approval?')) {
+            var reqid = $("#RequestID").val();
+
+            $.ajax({
+                url: '/Request/CancelApproval',
+                data: { id: reqid },
+                success: function (e) {
+                    alert('done');
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                }
+            })
+
+        }
+    }
+
+    function cancelRequest() {
+        if (confirm('Are you sure you want to cancel the request and all tests?')) {
+            var reqid = $("#RequestID").val();
+
+            $.ajax({
+                url: '/Request/CancelRequest',
+                data: { id: reqid },
+                success: function (e) {
+                    alert('done');
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                }
+            })
+
+        }
+    }
+
+    function completeRequest() {
+       // if (confirm('Are you sure you want to cancel the request and all tests?')) {
+
+        if ($("#ClosureNotes").val() == "") {
+            $("#ClosureNotes").css("border-color", "red");
+            alert('Closure notes required!');
+            $("#ClosureNotes").focus();
+
+            return false;
+        }
+
+        var closureNote = $("#ClosureNotes").val();
+
+        var reqid = $("#RequestID").val();
+
+            $.ajax({
+                url: '/Request/CompleteRequest',
+                data: { id: reqid, comment: closureNote },
+                success: function (e) {
+                    alert('done');
+                    
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                }
+            })
+
+        //}
     }
 
     $(function () {

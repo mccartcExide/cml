@@ -1,0 +1,27 @@
+﻿
+@(Html.Kendo().Grid<CML.Models.Notification>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.MessageType);
+        columns.Bound(c => c.LoggedOn);
+        columns.Bound(c => c.SentOn);
+        columns.Bound(c => c.Sent);
+        columns.Command(command => { command.Edit(); }).Width(180);
+      })
+      .ColumnMenu()
+      .Editable(editable => editable.Mode(GridEditMode.InLine))
+      .Pageable()
+      .Navigatable()
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p => p.ID))
+          .Read(read => read.Action("Notifications_Read", "Notification"))
+          .Update(update => update.Action("Notifications_Update", "Notification"))
+      )
+)

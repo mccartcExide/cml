@@ -25,9 +25,7 @@ namespace CML.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<CML_Approvals> CML_Approvals { get; set; }
         public virtual DbSet<CML_Attachments> CML_Attachments { get; set; }
-        public virtual DbSet<CML_BusinessUnit> CML_BusinessUnit { get; set; }
         public virtual DbSet<CML_Disposition> CML_Disposition { get; set; }
         public virtual DbSet<CML_Location> CML_Location { get; set; }
         public virtual DbSet<CML_Priority> CML_Priority { get; set; }
@@ -35,11 +33,16 @@ namespace CML.Models
         public virtual DbSet<CML_Status> CML_Status { get; set; }
         public virtual DbSet<CML_TestDefinition> CML_TestDefinition { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
-        public virtual DbSet<Sample> Samples { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<CML_RoleType> CML_RoleType { get; set; }
         public virtual DbSet<CML_User> CML_User { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<CML_SampleType> CML_SampleType { get; set; }
+        public virtual DbSet<Sample> Samples { get; set; }
+        public virtual DbSet<CML_BusinessUnit> CML_BusinessUnit { get; set; }
+        public virtual DbSet<CML_Approvals> CML_Approvals { get; set; }
+        public virtual DbSet<CML_Roles> CML_Roles { get; set; }
+        public virtual DbSet<CML_Settings> CML_Settings { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
     }
 }

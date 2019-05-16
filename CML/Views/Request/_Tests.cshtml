@@ -8,7 +8,7 @@
               columns.Bound(c => c.Name);
               columns.Bound(c => c.SampleType);
               columns.ForeignKey(c => c.StatusID, (System.Collections.IEnumerable)ViewData["statuses"], "ID", "Status").Width(100); ;
-              columns.ForeignKey(c => c.AssignedTo, (System.Collections.IEnumerable)ViewData["testers"], "ID", "DisplayName");
+              columns.ForeignKey(c => c.AssignedTo, (System.Collections.IEnumerable)ViewData["recipients"], "ID", "DisplayName");
               //columns.Bound(c => c.CML_User.DisplayName);
           })
           .ToolBar(toolbar =>

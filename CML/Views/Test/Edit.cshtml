@@ -9,304 +9,339 @@
     <title>Step</title>
 </head>
 <body>
-    @using (Html.BeginForm("Update", "Test", FormMethod.Post, new {id = "testForm" }))
-    {<div class="Request-Nav Top">
+    @using ( Html.BeginForm( "Update", "Test", FormMethod.Post, new { id = "testForm" } ) )
+
+    {@Html.HiddenFor( c => c.CMLRequest )
+    <div class="Request-Nav Top">
+
+        @if ( (Model.StatusID < 4 && Model.Request.StatusID == 1 ) || Model.IsManager)
+        {
+            <span>
+
+                <input type="button" class="k-button k-primary" style=" margin:5px;" value="Add Sample"
+                       onclick="location.href='@Url.Action( "Create", "Samples", new { testid = Model.TestID, abbrev = Model.Abbrev } )'" />
+            </span>
+        }
+        @if ( ( Model.Request.StatusID == 3 && Model.StatusID < 4 ) && Model.TotalSamples > 1 )
+        {
+            <span>
+                <input type="button" class="k-button k-primary" style=" margin:5px;" id="btnStartTest" value="Start Test" />
+            </span>
+        }
+        @if ( Model.StatusID == 4 )
+        {
+            
+            <span>
+                <input type="button" class="k-button k-primary" style=" margin:5px;" id="btnFinishTest" value="Complete Test" />
+            </span>
+        }
+        @if ( Model.StatusID < 5 )
+        {
+            <span>
+                <input type="button" class="k-button k-primary" style=" margin:5px;" value="Delete Test"
+                       onclick="location.href='@Url.Action( "Destroy", "Request", new { id = Model.TestID } )'" />
+            </span>
+        }
+        <span>
+            <input type="button" id="btnTest" class="k-button k-primary " style=" margin:5px;" value="Back to List"
+                   onclick="location.href='@Url.Action( "Index", "Test" )'" />
+        </span>
+        <span>
+            <input type="button" id="btnRequest" class="k-button k-primary " style=" margin:5px;" value="Back to Request"
+                   onclick="location.href='@Url.Action( "Edit", "Request", new { id = Model.CMLRequest } )'" />
+        </span>
 
 
-    <span>
-        <input type="button" class="k-button k-primary" style=" margin:5px;" value="Add Sample"
-               onclick="location.href='@Url.Action("Create", "Samples",new { id = Model.TestID })'" />
-    </span>
-    <span>
-        <input type="button" class="k-button k-primary" style=" margin:5px;" value="Start Test"
-               onclick="location.href='@Url.Action("CreateTest", "Request",new { id = Model.TestID })'" />
-    </span>
-    <span>
-        <input type="button" class="k-button k-primary" style=" margin:5px;" value="Complete Test"
-               onclick="location.href='@Url.Action("CancelApproval", "Request",new { id = Model.TestID })'" />
-    </span>
-    <span>
-        <input type="button" class="k-button k-primary" style=" margin:5px;" value="Delete Test"
-               onclick="location.href='@Url.Action("Destroy", "Request",new { id = Model.TestID })'" />
-    </span>
+        @if ( Model.StatusID < 5 )
+        {
+            <span class="float-right">
+                <input type="button" id="btnSub" value="Submit" style=" margin:5px;" class="k-button k-primary" />
+                <input type="button" id="btnSave" value="Save & Stay" style=" margin:5px;" class="k-button k-primary" />
 
-    <span>
-        <input type="button" id="btnTest" class="k-button k-primary " style=" margin:5px;" value="Back to List"
-               onclick="location.href='@Url.Action("Index", "Test")'" />
-    </span>
-    <span>
-        <input type="button" id="btnRequest" class="k-button k-primary " style=" margin:5px;" value="Back to Request"
-               onclick="location.href='@Url.Action("Edit", "Request",new { id= Model.CMLRequest })'" />
-    </span>
+            </span>
 
 
-
-    <span class="float-right">
-        <input type="button" id="btnSub" value="Submit"   style=" margin:5px;" class="k-button k-primary" />
-        <input type="button" id="btnSave" value="Save & Stay" style=" margin:5px;" class="k-button k-primary" />
-
-    </span>
-
-</div>
-     <div class="form-horizontal">
+        }
+    </div>
+    <div class="form-horizontal">
 
 
-         <table class="table req-new">
-             <tr>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.TestID, htmlAttributes: new { @class = " control-label col-md-2" })
-                         <div class="col-md-10">
+        <table class="table req-new">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.TestID, htmlAttributes: new { @class = " control-label col-md-2" } )
+                        <div class="col-md-10">
 
-                             @Html.EditorFor(model => model.TestID, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+                            @Html.EditorFor( model => model.TestID, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.StatusID, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.StatusID, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
 
-                             @Html.EditorFor(model => model.CML_Status.Status, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+                            @Html.EditorFor( model => model.CML_Status.Status, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
+                        </div>
+                    </div>
+                </td>
 
-             </tr>
+            </tr>
 
-             <tr>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.CMLRequest, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
-                             @Html.EditorFor(model => model.CMLRequest, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.CMLRequest, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
+                            @Html.EditorFor( model => model.CMLRequest, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.AssignedTo, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
-                             @(Html.Kendo().DropDownListFor(model => model.AssignedTo)
-                                                                                                                  .Name("AssignedTo")
-                                                                                                                  .OptionLabel("Please select")
-                                                                                                                  .DataTextField("Text")
-                                                                                                                  .DataValueField("Value")
-                                                                                                                  .BindTo(ViewData["assigneddl"] as SelectList)
-                             )
-                             @* @(Html.EditorFor(model => model.AssignedTo));*@
-                             @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
-                         </div>
-                     </div>
-                 </td>
-             </tr>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.AssignedTo, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
+                            @(Html.Kendo().DropDownListFor( model => model.AssignedTo )
+                                                                                                                     .Name( "AssignedTo" )
+                                                                                                                     .OptionLabel( "Please select" )
+                                                                                                                     .DataTextField( "Text" )
+                                                                                                                     .DataValueField( "Value" )
+                                                                                                                     .BindTo( ViewData["assigneddl"] as SelectList )
+                                                                                                                     .Events( ev => ev.Change( "AssignedChanged" ) )
+                            )
+                            @* @(Html.EditorFor(model => model.AssignedTo));*@
+                            @Html.ValidationMessageFor( model => model.AssignedTo, "", new { @class = "text-danger" } )
+                        </div>
+                    </div>
+                </td>
+            </tr>
 
-             <tr>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
 
-                             @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.EditorFor( model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.Abbrev, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.Abbrev, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
 
-                             @Html.EditorFor(model => model.Abbrev, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.EditorFor( model => model.Abbrev, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
-             </tr>
-             <tr>
-                 <td colspan="2">
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.Determines, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
-                             @Html.TextAreaFor(model => model.Determines, new { style = "width:100%;", @rows = "5", @cols = "100", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.Determines, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
+                            @Html.TextAreaFor( model => model.Determines, new { style = "width:100%;", @rows = "5", @cols = "100", @readonly = "readonly" } )
 
-                         </div>
-                     </div>
-                 </td>
-             </tr>
+                        </div>
+                    </div>
+                </td>
+            </tr>
 
-             <tr>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.SampleType, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.SampleType, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
 
-                             @Html.EditorFor(model => model.SampleType, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.EditorFor( model => model.SampleType, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.SampleSize, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.SampleSize, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
 
-                             @Html.EditorFor(model => model.SampleSize, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.EditorFor( model => model.SampleSize, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
-             </tr>
+                        </div>
+                    </div>
+                </td>
+            </tr>
 
-             <tr>
-                 <td colspan="2">
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.TotalSamples, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+            <tr>
+                <td colspan="2">
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.TotalSamples, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
 
-                             @Html.EditorFor(model => model.TotalSamples, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+                            @Html.EditorFor( model => model.TotalSamples, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
 
-                         </div>
-                     </div>
-                 </td>
-             </tr>
-             <tr>
-                 <td colspan="2">
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
-                             @Html.TextAreaFor(model => model.Comments, new { style = "width:100%;", @rows = "5", @cols = "100"})
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
+                            @Html.TextAreaFor( model => model.Comments, new { style = "width:100%;", @rows = "5", @cols = "100" } )
 
-                         </div>
-                     </div>
-                 </td>
-             </tr>
-         </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            @if ( Model.StatusID == 4 || Model.StatusID == 5 )
+            {
+            <tr id="trClosureNote">
 
-         @(Html.Kendo().TabStrip()
-                                                                 .Name("TestsTab")
-                                                                 .TabPosition(TabStripTabPosition.Left)
-                                                                 .Animation(a =>
-                                                                 {
-                                                                     a.Open(config =>
-                                                                     {
-                                                                         config.Fade(FadeDirection.In);
-                                                                     });
-                                                                 })
-                                                                 .SelectedIndex(0)
-                                                                 .Items(items =>
-                                                                 {
-                                                                     items.Add()
-                                                                     .Text("Samples")
-                                                                      .Content(Html.Partial("~/Views/Test/_SamplesList.cshtml").ToHtmlString());
-                                                                           items.Add()
-                                                                   .Text("Turnaround")
-                                                                    .Content(@<text>
-                                                                     Turnaround
-                                                                 </text>);
-                                                                      items.Add()
-                                                                    .Text("Notes")
-                                                                     .Content(@<text>
-                                                                         <table>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    <div class="form-group">
-                                                                                                                        @Html.LabelFor( model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" } )
-                                                                                                                        <div class="col-md-10">
-                                                                                                                            @Html.TextAreaFor( model => model.Note, new { style = "width:100%;", @rows = "5", @cols = "100" } )
-                                                                                                                            
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <tr>
-                                                                                                                <td>
-                                                                                                                    @foreach(var note in Model.TestNotes)
-                                                                                                                    {
-                                                                                                                        <div class="form-group">
-                                                                                                                            <span style="font-weight:bold;font-size:small;">@Html.DisplayFor(m => note.CreatedOn) @Html.DisplayFor(m => note.CreatedBy) </span>
-                                                                                                                            <div class="col-md-10">
-                                                                                                                                @Html.DisplayFor(m => note.NoteText)
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    }
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        </table>        
-                                                                     </text>);
-    items.Add()
-                                                     .Text("Attachments")
-                                                      .Content( Html.Partial( "~/Views/Files/_FilesUpload.cshtml", Model.Attachments ).ToHtmlString() );
-items.Add()
- .Text("Misc")
-  .Content(@<text>
-         
-         <table>
-             <tr>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+                <td colspan="2">
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.ClosureNote, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
+                            @Html.TextAreaFor( model => model.ClosureNote, new { style = "width:100%;", @rows = "5", @cols = "100" } )
+                            @Html.ValidationMessageFor( model => model.ClosureNote, "", new { @class = "text-danger" } )
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            }
+        </table>
 
-                             @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+        @(Html.Kendo().TabStrip()
+                                                                           .Name( "TestsTab" )
+                                                                           .TabPosition( TabStripTabPosition.Left )
+                                                                           .Animation( a =>
+                                                                           {
+                                                                               a.Open( config =>
+                                                                       {
+                config.Fade( FadeDirection.In );
+            } );
+                                                                           } )
+                                                                           .SelectedIndex( 0 )
+                                                                           .Items( items =>
+                                                                           {
+                                                                               items.Add()
+                                                                            .Text( "Samples" )
+                                                                             .Content( Html.Partial( "~/Views/Test/_SamplesList.cshtml" ).ToHtmlString() );
+                                                                               items.Add()
+                                                               .Text( "Turnaround" )
+                                                               .Content( Html.Partial( "~/Views/Test/_Durations.cshtml" ).ToHtmlString() );
+                                                                               items.Add()
+                                                               .Text( "Notes" )
+                                                               .Content(@<text>
+        <table>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        @Html.LabelFor( model => model.Note, htmlAttributes: new { @class = "control-label col-md-2" } )
+                        <div class="col-md-10">
+                            @Html.TextAreaFor( model => model.Note, new { style = "width:100%;", @rows = "5", @cols = "100" } )
 
-                         </div>
-                     </div>
-                 </td>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.CreatedOn, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @foreach ( var note in Model.TestNotes )
+                            {
+                        <div class="form-group">
+                            <span style="font-weight:bold;font-size:small;">@Html.DisplayFor( m => note.CreatedOn ) @Html.DisplayFor( m => note.CreatedBy ) </span>
+                            <div class="col-md-10">
+                                @Html.DisplayFor( m => note.NoteText )
+                            </div>
+                        </div>
+                            }
+                    /**/
+                    /**/
+                    /**/
+                </td>
+            </tr>
+        </table>
+                                                            </text>);
+                                                                                                                                           items.Add()
+                                                                                                          .Text( "Attachments" )
+                                                                                                           .Content( Html.Partial( "~/Views/Files/_FilesUpload.cshtml", Model.Attachments ).ToHtmlString() );
+                                                                                                                                           items.Add().Text( "Emails" ).Content( Html.Partial( "~/Views/Test/_NotificationView.cshtml" ).ToHtmlString() );
+                                                                                                                                           items.Add()
+                                                            .Text( "Misc" )
+                                                            .Content(@<text>
 
-                             @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+                                                                <table>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                @Html.LabelFor( model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                <div class="col-md-10">
 
-                         </div>
-                     </div>
-                 </td>
-             </tr>
-             <tr>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.UpdatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+                                                                                    @Html.EditorFor( model => model.CreatedBy, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
 
-                             @Html.EditorFor(model => model.UpdatedBy, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                @Html.LabelFor( model => model.CreatedOn, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                <div class="col-md-10">
 
-                         </div>
-                     </div>
-                 </td>
-                 <td>
-                     <div class="form-group">
-                         @Html.LabelFor(model => model.UpdatedOn, htmlAttributes: new { @class = "control-label col-md-2" })
-                         <div class="col-md-10">
+                                                                                    @Html.EditorFor( model => model.CreatedOn, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
 
-                             @Html.EditorFor(model => model.UpdatedOn, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } })
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                @Html.LabelFor( model => model.UpdatedBy, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                <div class="col-md-10">
 
-                         </div>
-                     </div>
-                 </td>
-             </tr>
-         </table>
-         
-                                                                </text>);
+                                                                                    @Html.EditorFor( model => model.UpdatedBy, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                @Html.LabelFor( model => model.UpdatedOn, htmlAttributes: new { @class = "control-label col-md-2" } )
+                                                                                <div class="col-md-10">
+
+                                                                                    @Html.EditorFor( model => model.UpdatedOn, new { htmlAttributes = new { @class = "k-textbox form-control", @readonly = "readonly" } } )
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+
+                                                            </text>);
 
 
 
-                              })
+                                                                    } )
 
-         )
+        )
 
 
 
 
-         @Html.HiddenFor(model => model.IsFromRequest)
-         @Html.HiddenFor(model => model.SaveAndStay)
-     </div>
-        
-    }
+        @Html.HiddenFor( model => model.IsFromRequest )
+        @Html.HiddenFor( model => model.SaveAndStay )
+        @Html.HiddenFor( model => model.StatusID )
+        @Html.HiddenFor(model => model.AssignedChanged)
+    </div>
+
+}
 
 </body>
 </html>
@@ -315,7 +350,7 @@ items.Add()
 
 
         var fromRequest = $('#IsFromRequest').val();
-        
+
         if (fromRequest == "True") {
             $('#btnTest').hide();
             $('#btnRequest').show();
@@ -325,7 +360,7 @@ items.Add()
         }
 
         $('#btnSub').click(function (e) {
-            
+
             $('#SaveAndStay').val("False");
             $('#testForm').submit();
         })
@@ -333,12 +368,62 @@ items.Add()
             $('#SaveAndStay').val("True");
             $('#testForm').submit();
         })
-            
+
+        $('#btnStartTest').click(function (e) {
+
+            var id = $('#TestID').val();
+            $.ajax({
+                type: 'GET',
+                url: '/Test/StartTest',
+                data: { id: id },
+                success: function (data) {
+                    $('#btnStartTest').hide();
+                    $('#btnFinishTest').show();
+                    $('#CML_Status_Status').val("Testing");
+
+                    alert(data.message);
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                }
+            })
+        });
+
+        $('#btnFinishTest').click(function (e) {
+
+            var comment = $("#ClosureNote").val();
+            if (comment == '') {
+                alert('Please provide closure details');
+                return false;
+            }
+            var id = $('#TestID').val();
+
+            $.ajax({
+                type: 'GET',
+                url: '/Test/CompleteTest',
+                data: { id: id },
+                success: function (data) {
+                    $('#btnFinishTest').hide();
+                    $('#CML_Status_Status').val("Complete");
+                    alert(data.message);
+
+                },
+                error: function (xhr) {
+                    alert('Ooops something went wrong!' + xhr);
+                }
+            })
+        })
+
+
     });
+
+    function AssignedChanged(e) {
+        $('#AssignedChanged').val(true);
+    }
 
     function checkSubmit(e) {
         alert('clicked');
-        
-      //  $('#testForm').submit();
+
+        //  $('#testForm').submit();
     }
 </script>

@@ -9,43 +9,44 @@ using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using CML.Models;
+using CML.Authorize;
 
 namespace CML.Controllers
 {
-    public class BusinessUnitController : Controller
+    public class BUController : Controller
     {
         private CMLEntities db = new CMLEntities();
 
-        private static IEnumerable<BusinessUnitModel> GetBusinessUnits()
-        {
-            var dbs = new CMLEntities();
-            var bus = dbs.CML_BusinessUnit.Select(b => new BusinessUnitModel
-            {
-                ID = b.ID,
-                BusinessUnit = b.BusinessUnit
-
-            });
-            return bus;
-        }
-
+        [CMLRoleAuthorize( Authorize.Roles.Admin, Authorize.Roles.Manager )]
         public ActionResult Index()
         {
-            return View("Index", "_AdminLayout");
+            IList<CML_User> approv = db.CML_User.ToList();
+            ViewData["approvers"] = approv;
+            return View();
         }
 
         public ActionResult CML_BusinessUnit_Read([DataSourceRequest]DataSourceRequest request)
         {
-           return Json(GetBusinessUnits().ToDataSourceResult(request));
+            IQueryable<CML_BusinessUnit> cml_businessunit = db.CML_BusinessUnit;
+            DataSourceResult result = cml_businessunit.ToDataSourceResult(request, cML_BusinessUnit => new {
+                ID = cML_BusinessUnit.ID,
+                BusinessUnit = cML_BusinessUnit.BusinessUnit,
+                ApproverID = cML_BusinessUnit.ApproverID
+                
+            });
+
+            return Json(result);
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult CML_BusinessUnit_Create([DataSourceRequest]DataSourceRequest request, BusinessUnitModel cML_BusinessUnit)
+        public ActionResult CML_BusinessUnit_Create([DataSourceRequest]DataSourceRequest request, CML_BusinessUnit cML_BusinessUnit)
         {
             if (ModelState.IsValid)
             {
                 var entity = new CML_BusinessUnit
                 {
                     BusinessUnit = cML_BusinessUnit.BusinessUnit,
+                    ApproverID = cML_BusinessUnit.ApproverID
                 };
 
                 db.CML_BusinessUnit.Add(entity);
@@ -57,7 +58,7 @@ namespace CML.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult CML_BusinessUnit_Update([DataSourceRequest]DataSourceRequest request, BusinessUnitModel cML_BusinessUnit)
+        public ActionResult CML_BusinessUnit_Update([DataSourceRequest]DataSourceRequest request, CML_BusinessUnit cML_BusinessUnit)
         {
             if (ModelState.IsValid)
             {
@@ -65,29 +66,11 @@ namespace CML.Controllers
                 {
                     ID = cML_BusinessUnit.ID,
                     BusinessUnit = cML_BusinessUnit.BusinessUnit,
+                    ApproverID = cML_BusinessUnit.ApproverID
                 };
 
                 db.CML_BusinessUnit.Attach(entity);
                 db.Entry(entity).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-
-            return Json(new[] { cML_BusinessUnit }.ToDataSourceResult(request, ModelState));
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult CML_BusinessUnit_Destroy([DataSourceRequest]DataSourceRequest request, BusinessUnitModel cML_BusinessUnit)
-        {
-            if (ModelState.IsValid)
-            {
-                var entity = new CML_BusinessUnit
-                {
-                    ID = cML_BusinessUnit.ID,
-                    BusinessUnit = cML_BusinessUnit.BusinessUnit,
-                };
-
-                db.CML_BusinessUnit.Attach(entity);
-                db.CML_BusinessUnit.Remove(entity);
                 db.SaveChanges();
             }
 

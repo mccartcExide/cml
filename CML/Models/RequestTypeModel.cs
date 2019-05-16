@@ -13,7 +13,7 @@ namespace CML.Models
 
         [Required]
         public string RequestType { set; get; }
-
+        public string Category { get; set; }
 
     }
 }

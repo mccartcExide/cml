@@ -1,0 +1,30 @@
+﻿@(Html.Kendo().Chart<CML.Models.PieChartStatus>()
+          .Name( "chart" )
+          .Title( "Open Requests" )
+          .Legend( legend => legend.Position( ChartLegendPosition.Bottom ) )
+          .Tooltip( tooltip => tooltip
+                                .Visible( true )
+                                .Template( ": #= value #" ) )
+          .DataSource( ds => ds.Read( read => read.Action( "Requests_Read", "Dash" ) ) )
+          .Series( series =>
+          {
+
+              series.Pie( a => a.count, a => a.Status ).Name( "Status" );
+          } )
+          .Pdf( pdf => pdf
+             .FileName( "OpenRequests.pdf" )
+             .ProxyURL( Url.Action( "Pdf_Export_Save", "Dash" ) )
+        )
+
+
+)
+
+<div class="box-col">
+    <button class='export-pdf k-button'>Save as PDF</button>
+</div>
+
+<script>
+    $(".export-pdf").click(function () {
+        $("#chart").getKendoChart().saveAsPDF();
+    });
+</script>

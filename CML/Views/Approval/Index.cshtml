@@ -1,0 +1,46 @@
+﻿
+@(Html.Kendo().Grid<CML.Models.ApprovalGridModel>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Command( command => command.Custom( "Action" ).Click( "showDetails" ) ).Width(80);
+          columns.Bound( c => c.RequestID ).Title( "Request" ).Width(80);
+          columns.Bound( c => c.Name ).Title("Request");
+          columns.Bound( c => c.CMLNumber ).Width(100);
+          columns.ForeignKey( c => c.UserID, ( System.Collections.IEnumerable )ViewData["approvers"], "ID", "DisplayName" ).Width( 150 ).Title("Approver");
+          columns.Bound(c => c.Outcome).Width(120);
+          columns.Bound(c => c.DateAssigned).Format( "{0:MM/dd/yyyy}" ).Width( 110 ).Title( "Assigned" );
+          columns.Bound(c => c.DateActioned).Format( "{0:MM/dd/yyyy}" ).Width( 110 ).Title( "Actioned" );
+          columns.Bound(c => c.Comments);
+      })
+      .Groupable()
+      .ColumnMenu()
+      .Pageable()
+      .Navigatable()
+      .Selectable(selectable => {
+          selectable.Mode(GridSelectionMode.Single);
+          selectable.Type(GridSelectionType.Row);
+      })
+      .Sortable(sortable => {
+          sortable.SortMode(GridSortMode.SingleColumn);
+      })
+      .Filterable()
+      
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("CML_Approvals_Read", "Approval"))
+      )
+)
+<script>
+    $(document).ready(function (e) {
+        var gr = $('#grid').data("kendoGrid");
+        gr.hideColumn("RequestID")
+    })
+
+    function showDetails(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        window.location.href = "Approval/GetApprovalRec?id=" + dataItem["ID"] + "&req=" + dataItem["RequestID"];
+
+    }
+</script>

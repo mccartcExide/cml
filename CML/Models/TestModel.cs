@@ -5,11 +5,18 @@ using System.Web;
 
 namespace CML.Models
 {
+    public class TestStartResultModel
+    {
+        public Nullable<System.DateTime> time { get; set; }
+        public int status { get; set; }
+        public string message { get; set; }
+    }
     public class TestModel
     {
         public TestModel()
         {
             this.Samples = new HashSet<Sample>();
+
         }
 
         public int TestID { get; set; }
@@ -27,12 +34,12 @@ namespace CML.Models
         public string Status { get; set; }
         public Nullable<System.DateTime> TestStarted { get; set; }
         public Nullable<System.DateTime> TestFinished { get; set; }
-        public string SamplePreparations { get; set; }
-        public string SampleAnalysis { get; set; }
-        public string DataAnalysis { get; set; }
-        public string Reports { get; set; }
-        public string Cleaning { get; set; }
-        public string Total { get; set; }
+        public Nullable<double> SamplePreparations { get; set; }
+        public Nullable<double> SampleAnalysis { get; set; }
+        public Nullable<double> DataAnalysis { get; set; }
+        public Nullable<double> Reports { get; set; }
+        public Nullable<double> Cleaning { get; set; }
+        public Nullable<double> Total { get; set; }
         public string Name { get; set; }
         public string Abbrev { get; set; }
         public string Determines { get; set; }
@@ -40,7 +47,10 @@ namespace CML.Models
         public string SampleSize { get; set; }
         public bool IsFromRequest { get; set; }
         public bool SaveAndStay { get; set; }
+        public bool AssignedChanged { get; set; }
         public string Note { get; set; }
+        public bool IsManager { get; set; }
+        public string ClosureNote { get; set; }
         public virtual AttachmentsModel Attachments { get; set; }
         public virtual ICollection<Note> TestNotes { get; set; }
         public virtual CML_TestDefinition CML_TestDefinition { get; set; }
@@ -49,5 +59,26 @@ namespace CML.Models
         public virtual ICollection<Sample> Samples { get; set; }
         public virtual CML_User CML_User { get; set; }
         public virtual CML_Status CML_Status { get; set; }
+
+        //public TestModel Convert(Test t )
+        //{
+        //    this.Abbrev = t.Abbrev;
+        //    this.AssignedTo = t.AssignedTo;
+        //    this.Cleaning = t.Cleaning;
+        //    this.CMLRequest = t.CMLRequest;
+        //    this.CML_Status = t.CML_Status;
+        //    this.CML_TestDefinition = t.CML_TestDefinition;
+        //    this.CML_User = t.CML_User;
+        //    this.Comments = t.Comments;
+        //    this.CreatedBy = t.CreatedBy;
+        //    this.CreatedOn = t.CreatedOn;
+        //    this.DataAnalysis = t.DataAnalysis;
+        //    this.Determines = t.Determines;
+        //    this.Name = t.Name;
+        //    this.Note = t.
+
+
+        //    return this;
+        //}
     }
 }

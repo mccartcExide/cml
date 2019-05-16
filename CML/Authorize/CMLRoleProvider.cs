@@ -5,7 +5,7 @@ using System.Web;
 using CML.Models;
 using CML.Utilities;
 
-namespace CML.Controllers
+namespace CML.Authorize
 {
     public class CMLRoleProvider : System.Web.Security.RoleProvider
     {
@@ -38,7 +38,10 @@ namespace CML.Controllers
 
         public override string[] GetRolesForUser(string username)
         {
-            throw new NotImplementedException();
+            using(CMLEntities db = new CMLEntities() )
+            {
+                return db.GetRoles( username );
+            }
         }
 
         public override string[] GetUsersInRole(string roleName)
@@ -51,11 +54,11 @@ namespace CML.Controllers
             string user = ExtractUsername(username);
             using(CMLEntities db = new CMLEntities())
             {
-                return db.IsUserInRole(user);
+                return db.IsUserInRole(user,roleName);
             }
 
         }
-
+      
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
         {
             throw new NotImplementedException();

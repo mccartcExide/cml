@@ -6,8 +6,8 @@
           columns.Bound(c => c.UserID);
           columns.Bound(c => c.Email);
           columns.Bound(c => c.DisplayName);
-          columns.ForeignKey(l=>l.RoleTypeID,(System.Collections.IEnumerable)ViewData["roletypes"],"ID","RoleType")
-           .Title("Role Type").Width(200);
+          //columns.ForeignKey(l=>l.RoleTypeID,(System.Collections.IEnumerable)ViewData["roletypes"],"ID","RoleType")
+          // .Title("Role Type").Width(200);
           //columns.Bound(c => c.RoleTypeID);
           columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
       })
@@ -19,6 +19,7 @@
       .Editable(editable => editable.Mode(GridEditMode.InLine))
       .Pageable()
       .Navigatable()
+       .HtmlAttributes( new { style = "height: 450px;" } )
       .Selectable(selectable => {
           selectable.Mode(GridSelectionMode.Single);
           selectable.Type(GridSelectionType.Row);

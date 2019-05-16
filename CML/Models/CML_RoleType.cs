@@ -14,16 +14,7 @@ namespace CML.Models
     
     public partial class CML_RoleType
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CML_RoleType()
-        {
-            this.CML_User = new HashSet<CML_User>();
-        }
-    
         public int ID { get; set; }
         public string RoleType { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CML_User> CML_User { get; set; }
     }
 }

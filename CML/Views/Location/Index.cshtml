@@ -4,6 +4,7 @@
               .Columns(columns =>
               {
                   columns.Bound(c => c.Location);
+                  columns.Bound( c => c.Code );
                   columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
               })
               .ToolBar(toolbar =>
@@ -11,7 +12,7 @@
                   toolbar.Create();
                   toolbar.Excel();
               })
-              .Editable(editable => editable.Mode(GridEditMode.PopUp))
+              .Editable(editable => editable.Mode(GridEditMode.InLine))
               .Scrollable()
                .Pageable(pageable => pageable
                             .Refresh(true)

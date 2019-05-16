@@ -16,6 +16,8 @@ namespace CML.Models
     {
         public int ID { get; set; }
         public Nullable<int> TestID { get; set; }
+        public Nullable<int> SampleTypeID { get; set; }
+        public Nullable<int> TotalSamples { get; set; }
         public string NegComment { get; set; }
         public string NegOtherID { get; set; }
         public Nullable<int> NegOtherNumber { get; set; }
@@ -36,10 +38,12 @@ namespace CML.Models
         public string SampleIDs { get; set; }
         public string SampleName { get; set; }
         public string SeperatorType { get; set; }
-        public Nullable<int> TotalSamples { get; set; }
-        public Nullable<int> SampleType { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public Nullable<System.DateTime> UpdatedOn { get; set; }
     
-        public virtual Test Test { get; set; }
         public virtual CML_SampleType CML_SampleType { get; set; }
+        public virtual Test Test { get; set; }
     }
 }

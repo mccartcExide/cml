@@ -17,9 +17,10 @@ namespace CML.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Request()
         {
-            this.CML_Approvals = new HashSet<CML_Approvals>();
             this.CML_Attachments = new HashSet<CML_Attachments>();
             this.Tests = new HashSet<Test>();
+            this.CML_Approvals = new HashSet<CML_Approvals>();
+            this.Notifications = new HashSet<Notification>();
         }
     
         public int RequestID { get; set; }
@@ -48,21 +49,25 @@ namespace CML.Models
         public int RequestTypeID { get; set; }
         public Nullable<int> AssignedTo { get; set; }
         public Nullable<int> TotalSamples { get; set; }
+        public string WatchList { get; set; }
+        public string ClosureNotes { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CML_Approvals> CML_Approvals { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CML_Attachments> CML_Attachments { get; set; }
-        public virtual CML_BusinessUnit CML_BusinessUnit { get; set; }
         public virtual CML_Disposition CML_Disposition { get; set; }
         public virtual CML_Location CML_Location { get; set; }
         public virtual CML_Priority CML_Priority { get; set; }
         public virtual CML_RequestType CML_RequestType { get; set; }
         public virtual CML_Status CML_Status { get; set; }
-        public virtual Request Request1 { get; set; }
-        public virtual Request Request2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Test> Tests { get; set; }
         public virtual CML_User CML_User { get; set; }
+        public virtual CML_BusinessUnit CML_BusinessUnit { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CML_Approvals> CML_Approvals { get; set; }
+        public virtual Request Request1 { get; set; }
+        public virtual Request Request2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }
